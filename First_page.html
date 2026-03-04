@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+    <title>Learn Fast</title>
+    <link rel="stylesheet" href="sigma.css">
+
+    <!-- 🚀 AUTO-CORRECT SCRIPT: Ensures you are on the Python Server -->
+    <script>
+        // If the user is NOT on port 5001, send them there immediately.
+        if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+            if (window.location.port !== "5001") {
+                console.log("Wrong Port Detected! Redirecting to Python Server...");
+                window.location.href = "http://127.0.0.1:5001/First_page.html";
+            }
+        }
+    </script>
+
+    <style>
+        .lang-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            z-index: 200;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+        .lang-btn:hover { background: #3b82f6; }
+    </style>
+</head>
+<body>
+
+    <button id="langBtn" class="lang-btn" onclick="toggleLanguage()">🇧🇬 BG</button>
+
+    <h1 id="mainTitle">Join the Future of Learning</h1>
+
+    <div class="container">
+        <div class="cyber-box">
+            <p id="box1Text">Do you want to start your journey?</p>
+            <a href="Log_in_page.html">
+                <button id="box1Btn">Start journey</button>
+            </a>
+        </div>
+
+        <div class="cyber-box">
+            <p id="box2Text">Do you want to see who we are?</p>
+            <a href="Info_page.html">
+                <button id="box2Btn">See Info about us</button>
+            </a>
+        </div>
+
+        <div class="cyber-box">
+            <p id="box3Text">Do you want to see why we are the best?</p>
+            <a href="Chose_us_page.html">
+                <button id="box3Btn">Why to chose us</button>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "Join the Future of Learning",
+                b1Text: "Do you want to start your journey?",
+                b1Btn: "Start journey",
+                b2Text: "Do you want to see who we are?",
+                b2Btn: "See Info about us",
+                b3Text: "Do you want to see why we are the best?",
+                b3Btn: "Why to chose us"
+            },
+            bg: {
+                title: "Бъдещето на Ученето",
+                b1Text: "Искаш ли да започнеш своето пътешествие?",
+                b1Btn: "Започни сега",
+                b2Text: "Искаш ли да разбереш кои сме ние?",
+                b2Btn: "Виж информация за нас",
+                b3Text: "Защо ние сме най-добрите?",
+                b3Btn: "Защо да избереш нас"
+            }
+        };
+
+        let currentLang = localStorage.getItem('appLang') || 'en';
+        applyLanguage();
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'bg' : 'en';
+            localStorage.setItem('appLang', currentLang);
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            const t = translations[currentLang];
+            document.getElementById('langBtn').innerText = currentLang === 'en' ? '🇧🇬 BG' : '🇬🇧 EN';
+
+            document.getElementById('mainTitle').innerText = t.title;
+            document.getElementById('box1Text').innerText = t.b1Text;
+            document.getElementById('box1Btn').innerText = t.b1Btn;
+            document.getElementById('box2Text').innerText = t.b2Text;
+            document.getElementById('box2Btn').innerText = t.b2Btn;
+            document.getElementById('box3Text').innerText = t.b3Text;
+            document.getElementById('box3Btn').innerText = t.b3Btn;
+        }
+    </script>
+</body>
+</html>

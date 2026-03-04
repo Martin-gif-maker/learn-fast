@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+    <title>Create Star Profile - Learn Fast</title>
+    <link rel="stylesheet" href="sigma.css">
+
+    <!-- 🚀 AUTO-CORRECTOR: Forces the page to run on the Python Server (Port 5001) -->
+    <script>
+        if ((window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") && window.location.port !== "5001") {
+            console.log("Wrong Port! Redirecting to Python Server...");
+            window.location.href = "http://127.0.0.1:5001" + window.location.pathname;
+        }
+    </script>
+
+    <style>
+        .lang-btn {
+            position: fixed;
+            top: 20px; right: 20px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #3b82f6; color: white;
+            padding: 10px 20px; border-radius: 50px;
+            cursor: pointer; z-index: 200; font-size: 1.2rem;
+            transition: 0.3s;
+        }
+        .lang-btn:hover { background: #3b82f6; }
+
+        .hidden { display: none; }
+
+        /* Smooth transition for messages */
+        #statusText { transition: color 0.3s ease; }
+    </style>
+</head>
+<body id="portal-body">
+
+    <button id="langBtn" class="lang-btn" onclick="toggleLanguage()">🇧🇬 BG</button>
+
+    <div class="login-panel" id="signup-panel">
+        <div class="glow-edge"></div>
+
+        <h2 id="pageTitle">Create Your Star Profile</h2>
+
+        <!-- STATUS MESSAGE AREA -->
+        <p id="statusText" class="status-text" style="color: #8b5cf6; min-height: 20px;">REGISTRATION PROTOCOL ACTIVE</p>
+
+        <div class="terminal-form">
+
+            <!-- STEP 1: DETAILS -->
+            <div id="step1">
+                <div class="input-field">
+                    <label id="labelName">PILOT NAME</label>
+                    <input type="text" id="regName" placeholder="FULL NAME" required>
+                </div>
+
+                <div class="input-field">
+                    <label id="labelEmail">COMMUNICATION CHANNEL</label>
+                    <input type="email" id="regEmail" placeholder="EMAIL ADDRESS" required>
+                </div>
+
+                <div class="input-field">
+                    <label id="labelPass">SECURE ACCESS KEY</label>
+                    <input type="password" id="regPass" placeholder="CREATE PASSWORD" required>
+                </div>
+
+                <button id="getCodeBtn" class="system-enter-btn">
+                    Get Verification Code
+                </button>
+            </div>
+
+            <!-- STEP 2: CODE VERIFICATION (Hidden at start) -->
+            <div id="step2" class="hidden">
+                <div class="input-field">
+                    <label id="labelCode" style="color: #4ade80;">ENTER 6-DIGIT CODE</label>
+                    <input type="text" id="regCode" placeholder="XXXXXX" style="text-align: center; font-size: 1.5rem; letter-spacing: 5px;">
+                </div>
+                <button id="verifyBtn" class="system-enter-btn">
+                    Verify & Join
+                </button>
+            </div>
+
+        </div>
+
+        <p class="signup-link">
+            <span id="linkText">Already a pilot?</span>
+            <a href="Log_in_page.html" id="linkAction">Return to Hangar</a>
+        </p>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "Create Your Star Profile",
+                status: "REGISTRATION PROTOCOL ACTIVE",
+                lName: "PILOT NAME", pName: "FULL NAME",
+                lEmail: "COMMUNICATION CHANNEL", pEmail: "EMAIL ADDRESS",
+                lPass: "SECURE ACCESS KEY", pPass: "CREATE PASSWORD",
+                btn1: "Get Verification Code",
+                btn2: "Verify & Join",
+                lCode: "ENTER 6-DIGIT CODE",
+                linkText: "Already a pilot?", linkAction: "Return to Hangar",
+                sending: "⏳ Sending Code...",
+                verify: "⏳ Verifying...",
+                alertFill: "Please fill all fields!",
+                alertSent: "Code sent to your email!",
+                alertSuccess: "Account Created! Redirecting..."
+            },
+            bg: {
+                title: "Създай Своя Звезден Профил",
+                status: "РЕГИСТРАЦИОНЕН ПРОТОКОЛ АКТИВЕН",
+                lName: "ИМЕ НА ПИЛОТ", pName: "ПЪЛНО ИМЕ",
+                lEmail: "КОМУНИКАЦИОНЕН КАНАЛ", pEmail: "ИМЕЙЛ АДРЕС",
+                lPass: "КОД ЗА ДОСТЪП", pPass: "СЪЗДАЙ ПАРОЛА",
+                btn1: "Получи Код за Потвърждение",
+                btn2: "Потвърди и Влез",
+                lCode: "ВЪВЕДИ 6-ЦИФРЕН КОД",
+                linkText: "Вече си пилот?", linkAction: "Върни се в Хангара",
+                sending: "⏳ Изпращане...",
+                verify: "⏳ Проверка...",
+                alertFill: "Моля попълнете всички полета!",
+                alertSent: "Кодът е изпратен!",
+                alertSuccess: "Акаунтът е създаден! Пренасочване..."
+            }
+        };
+
+        let currentLang = localStorage.getItem('appLang') || 'en';
+        applyLanguage();
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'bg' : 'en';
+            localStorage.setItem('appLang', currentLang);
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            const t = translations[currentLang];
+            document.getElementById('langBtn').innerText = currentLang === 'en' ? '🇧🇬 BG' : '🇬🇧 EN';
+            document.getElementById('pageTitle').innerText = t.title;
+
+            const statusEl = document.getElementById('statusText');
+            if (statusEl.style.color === 'rgb(139, 92, 246)' || statusEl.style.color === '#8b5cf6') {
+                statusEl.innerText = t.status;
+            }
+
+            document.getElementById('labelName').innerText = t.lName;
+            document.getElementById('regName').placeholder = t.pName;
+            document.getElementById('labelEmail').innerText = t.lEmail;
+            document.getElementById('regEmail').placeholder = t.pEmail;
+            document.getElementById('labelPass').innerText = t.lPass;
+            document.getElementById('regPass').placeholder = t.pPass;
+            document.getElementById('getCodeBtn').innerText = t.btn1;
+            document.getElementById('verifyBtn').innerText = t.btn2;
+            document.getElementById('labelCode').innerText = t.lCode;
+            document.getElementById('linkText').innerText = t.linkText;
+            document.getElementById('linkAction').innerText = t.linkAction;
+        }
+
+        function showMessage(msg, type) {
+            const el = document.getElementById('statusText');
+            el.innerText = msg;
+            if (type === 'error') el.style.color = '#ef4444';
+            else if (type === 'success') el.style.color = '#4ade80';
+            else el.style.color = '#8b5cf6';
+        }
+
+        // --- STEP 1: SEND CODE ---
+        const btn1 = document.getElementById('getCodeBtn');
+        const btn2 = document.getElementById('verifyBtn');
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+
+        btn1.addEventListener('click', async () => {
+            const t = translations[currentLang];
+            const email = document.getElementById('regEmail').value;
+            const name = document.getElementById('regName').value;
+            const pass = document.getElementById('regPass').value;
+
+            if(!name || !email || !pass) {
+                showMessage(t.alertFill, 'error');
+                return;
+            }
+
+            btn1.innerText = t.sending;
+
+            try {
+                // Because of the Auto-Corrector script at the top,
+                // we can safely use relative paths like /api/...
+                const res = await fetch('/api/send-code', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ email: email })
+                });
+                const data = await res.json();
+
+                if (data.error) {
+                    showMessage(data.error, 'error');
+                    btn1.innerText = t.btn1;
+                } else {
+                    showMessage(t.alertSent, 'success');
+                    step1.classList.add('hidden');
+                    step2.classList.remove('hidden');
+                }
+            } catch (e) {
+                console.error(e);
+                showMessage("Server Error (Is Python running?)", 'error');
+                btn1.innerText = t.btn1;
+            }
+        });
+
+        // --- STEP 2: VERIFY & REGISTER ---
+        btn2.addEventListener('click', async () => {
+            const t = translations[currentLang];
+            const code = document.getElementById('regCode').value;
+            const email = document.getElementById('regEmail').value;
+            const name = document.getElementById('regName').value;
+            const pass = document.getElementById('regPass').value;
+
+            btn2.innerText = t.verify;
+
+            try {
+                const res = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ name, email, password: pass, code: code })
+                });
+                const data = await res.json();
+
+                if (data.error) {
+                    showMessage(data.error, 'error');
+                    btn2.innerText = t.btn2;
+                } else {
+                    showMessage(t.alertSuccess, 'success');
+                    document.body.classList.add('hyperspace-active');
+                    setTimeout(() => {
+                        window.location.href = "Log_in_page.html";
+                    }, 1500);
+                }
+            } catch (e) {
+                showMessage("Server Error", 'error');
+                btn2.innerText = t.btn2;
+            }
+        });
+    </script>
+</body>
+</html>

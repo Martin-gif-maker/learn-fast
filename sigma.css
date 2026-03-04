@@ -1,0 +1,979 @@
+/* 1. Page Setup - FIXED for Scrolling */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #020617;
+
+    /* Change height to min-height so the page can grow */
+    min-height: 100vh;
+    height: auto;
+
+    /* Allow standard scrolling */
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    /* CHANGED: Start from top, don't force center vertically */
+    justify-content: flex-start;
+
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+
+    /* Add padding at the bottom so you can scroll past the last card */
+    padding-bottom: 100px;
+}
+/* 2. The Spinning Galaxy Layer - MASSIVE (500%) & FIXED */
+body::before {
+    content: "";
+
+    /* Locks it to the screen so it doesn't move when you scroll down */
+    position: fixed;
+
+    /* This centers the massive 500% box */
+    top: -200%;
+    left: -200%;
+
+    /* 5x Bigger than your screen */
+    width: 500%;
+    height: 500%;
+
+    /* The Galaxy Gradient & Stars */
+    background: radial-gradient(circle at center,
+        rgba(59, 130, 246, 0.3) 0%,      /* Brighter center */
+        rgba(139, 92, 246, 0.15) 30%,    /* Wider spread */
+        transparent 70%),
+    url('https://www.transparenttextures.com/patterns/stardust.png');
+
+    /* Make the stars repeat so it's not empty */
+    background-repeat: repeat;
+
+    /* Very slow rotation */
+    animation: rotateGalaxy 240s linear infinite;
+    z-index: -1;
+}
+
+@keyframes rotateGalaxy {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+}
+
+@keyframes rotateGalaxy {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 3. Title Spacing - Added the gaps you asked for */
+h1 {
+    margin-top: 200px !important;   /* Space from top of screen to title */
+    margin-bottom: 80px;  /* Space from title to the first box */
+    text-align: center;
+    font-size: 70px;
+    text-shadow: 0 0 15px #3b82f6;
+}
+
+/* 4. The Separated Paragraph Boxes */
+.main-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+    padding-bottom: 100px;
+    margin-top: 10px;
+}
+
+.info-box {
+    width: 80%;
+    max-width: 900px;
+    padding: 30px;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    border: 2px solid #3b82f6;
+    border-radius: 25px;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.info-box p {
+    color: white;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* 5. First Page Elements (Kept for your main menu) */
+.container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.cyber-box {
+    width: 280px;
+    height: 280px;
+    background: linear-gradient(145deg, #0f172a, #020617);
+    border: 2px solid #3b82f6;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+}
+
+button {
+    margin-top: 30px;
+    padding: 10px 25px;
+    background: transparent;
+    border: 1px solid #3b82f6;
+    color: #3b82f6;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.back-btn-container {
+    position: absolute; /* Place it relative to the top of the page */
+    top: 20px;
+    left: 20px;
+    text-decoration: none; /* Removes the underline from the link */
+}
+
+.back-button {
+    padding: 10px 20px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 2px solid #3b82f6;
+    color: #3b82f6;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+}
+
+.back-button:hover {
+    background: #3b82f6;
+    color: white;
+    box-shadow: 0 0 20px #3b82f6;
+}
+
+/* Container to keep the hologram centered */
+.portal-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* The Holographic Glass Panel */
+.hologram-card {
+    width: 400px;
+    padding: 40px;
+    background: rgba(15, 23, 42, 0.6); /* Transparent dark blue */
+    backdrop-filter: blur(15px);        /* This creates the 'glass' effect */
+    border: 1px solid rgba(59, 130, 246, 0.5);
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.2),
+                inset 0 0 20px rgba(59, 130, 246, 0.1);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Futuristic Scanning Line */
+.scanner-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #3b82f6, transparent);
+    animation: scan 4s linear infinite;
+    opacity: 0.5;
+}
+
+@keyframes scan {
+    0% { top: 0%; }
+    100% { top: 100%; }
+}
+
+.hologram-card h2 {
+    color: #3b82f6;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.8);
+}
+
+.status-text {
+    font-size: 0.7rem;
+    color: #10b981; /* Green for 'Ready' */
+    letter-spacing: 3px;
+    margin-bottom: 30px;
+}
+
+/* Form Styling */
+.input-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.8rem;
+    color: #3b82f6;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 5px;
+    color: white;
+    outline: none;
+}
+
+.input-group input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+/* Launch Button */
+.launch-btn {
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
+    background: transparent;
+    border: 2px solid #3b82f6;
+    color: #3b82f6;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 5px;
+}
+
+.launch-btn:hover {
+    background: #3b82f6;
+    color: white;
+    box-shadow: 0 0 30px #3b82f6;
+    transform: translateY(-2px);
+}
+
+.footer-links {
+    margin-top: 25px;
+    font-size: 0.8rem;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-links a:hover {
+    color: #3b82f6;
+}
+/* Center the panel on the screen */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* The Glass Panel */
+.login-panel {
+    width: 380px;
+    background: rgba(2, 6, 23, 0.85); /* Almost black glass */
+    backdrop-filter: blur(20px);      /* Deep blur for that glass look */
+    padding: 50px 40px;
+    border-radius: 30px;
+    border: 1px solid rgba(59, 130, 246, 0.5); /* Neon blue border */
+    position: relative;
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.2);
+    text-align: center;
+    overflow: hidden;
+}
+
+/* Sci-fi UI animated line on the edge */
+.login-panel::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+    animation: borderMove 3s linear infinite;
+}
+
+@keyframes borderMove {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.login-panel h2 {
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    color: #3b82f6;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+/* Terminal Style Inputs */
+.input-field {
+    text-align: left;
+    margin-bottom: 25px;
+}
+
+.input-field label {
+    font-size: 0.7rem;
+    color: #3b82f6;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    display: block;
+    opacity: 0.8;
+}
+
+.input-field input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    padding: 12px;
+    border-radius: 8px;
+    color: #93c5fd; /* Light blue text */
+    font-family: monospace; /* Terminal feel */
+    outline: none;
+    transition: 0.3s;
+}
+
+.input-field input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+}
+
+/* The Big Glowing Button */
+.system-enter-btn {
+    width: 100%;
+    padding: 15px;
+    background: transparent;
+    border: 2px solid #3b82f6;
+    color: #3b82f6;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.4s ease;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+}
+
+.system-enter-btn:hover {
+    background: #3b82f6;
+    color: white;
+    box-shadow: 0 0 30px #3b82f6;
+    transform: scale(1.02);
+}
+
+.signup-link {
+    margin-top: 30px;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.signup-link a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+/* Add this to your existing sigma.css */
+
+/* Purple tint for the Registration status */
+.status-text {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+/* Specific styling for the Launch button */
+.launch-btn {
+    border-color: #8b5cf6 !important; /* Purple glow for 'Launch' */
+    color: #8b5cf6 !important;
+}
+
+.launch-btn:hover {
+    background: #8b5cf6 !important;
+    color: white !important;
+    box-shadow: 0 0 30px #8b5cf6 !important;
+}
+
+/* Ensure inputs in the sign-up form look consistent */
+.terminal-form .input-field input:focus {
+    border-color: #8b5cf6;
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+}
+.learning-core-wrapper {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    z-index: 10;
+}
+
+/* The Floating Orb */
+.core-orb {
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+    animation: floatCore 4s ease-in-out infinite;
+}
+
+@keyframes floatCore {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-10px) scale(1.05); }
+}
+
+.learning-core-wrapper h2 {
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #93c5fd;
+    margin-bottom: 10px;
+}
+
+.stats-row {
+    margin-bottom: 15px;
+    font-family: monospace;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+}
+
+.stats-row strong {
+    color: #3b82f6;
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+/* Progress Bar Styling */
+.xp-bar-container {
+    width: 300px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    margin: 0 auto 10px;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    overflow: hidden;
+    position: relative;
+}
+
+.xp-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    box-shadow: 0 0 15px #3b82f6;
+    border-radius: 10px;
+    transition: width 1s ease-in-out;
+}
+
+.next-level-text {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+}
+/* --- HYPERSPACE ANIMATION SECTION --- */
+
+/* 1. The Earth Overlay (Hidden by default) */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url('https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?q=80&w=2000') no-repeat center center;
+    background-size: cover;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease-in;
+    z-index: 9999;
+}
+
+/* 2. Warp Effect Styles */
+.hyperspace-active #main-panel {
+    transition: transform 0.6s cubic-bezier(0.6, -0.28, 0.735, 0.045), opacity 0.4s;
+    transform: scale(0) rotate(10deg);
+    opacity: 0;
+}
+
+.hyperspace-active::before {
+    animation: warpSpeed 0.8s forwards !important;
+}
+
+.hyperspace-active::after {
+    opacity: 1;
+}
+
+/* 3. The "Super Speed" Motion Blur Animation */
+@keyframes warpSpeed {
+    0% {
+        transform: scale(1) rotate(0deg);
+        filter: blur(0px) brightness(1);
+    }
+    50% {
+        filter: blur(10px) brightness(2);
+    }
+    100% {
+        transform: scale(5) rotate(10deg);
+        filter: blur(50px) brightness(5);
+        background: white;
+    }
+}
+
+/* 4. Smooth Transition for the Body */
+#portal-body {
+    transition: background-color 0.8s;
+}
+
+.hyperspace-active {
+    background-color: white !important;
+}
+/* --- HYPERSPACE ANIMATION SYSTEM --- */
+
+/* 1. Ensure the body can handle the zoom */
+#portal-body {
+    transition: background-color 0.8s ease-in;
+    perspective: 1000px; /* Adds 3D depth to the warp */
+}
+
+/* 2. The Earth "Landing" Layer */
+#portal-body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* High-quality Earth image */
+    background: url('https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?q=80&w=2000') no-repeat center center;
+    background-size: cover;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease-in;
+    z-index: 9999;
+}
+
+/* 3. When animation triggers: Shrink the Login Box */
+.hyperspace-active .login-panel {
+    pointer-events: none;
+    animation: shrinkOut 0.8s forwards cubic-bezier(0.6, -0.28, 0.735, 0.045);
+}
+
+/* 4. When animation triggers: Warp the Galaxy */
+.hyperspace-active::before {
+    animation: warpDrive 0.8s forwards !important;
+}
+
+/* 5. Show Earth at the very end */
+.hyperspace-active::after {
+    opacity: 1;
+}
+
+/* --- KEYFRAMES --- */
+
+@keyframes shrinkOut {
+    0% { transform: scale(1) translateZ(0); opacity: 1; }
+    100% { transform: scale(0) translateZ(-500px); opacity: 0; }
+}
+
+@keyframes warpDrive {
+    0% {
+        transform: scale(1);
+        filter: blur(0px) brightness(1);
+    }
+    60% {
+        filter: blur(15px) brightness(2);
+    }
+    100% {
+        transform: scale(10); /* Huge zoom for speed effect */
+        filter: blur(60px) brightness(5);
+        background: white;
+    }
+}
+/* --- EARTH DESCENT ANIMATION --- */
+
+/* 1. The Earth Planet (Approaching) */
+#portal-body::after {
+    content: "";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 100vw;
+    background: url('https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?q=80&w=2000') no-repeat center center;
+    background-size: cover;
+    border-radius: 50%; /* Makes it look like a planet first */
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    z-index: 10000;
+    pointer-events: none;
+    box-shadow: 0 0 100px rgba(59, 130, 246, 0.5);
+}
+
+/* 2. Atmosphere Re-entry Glow (The Fire) */
+#portal-body::before {
+    transition: all 0.5s ease;
+}
+
+/* 3. The Animation Sequence */
+.hyperspace-active .login-panel {
+    animation: zoomOut 1s forwards;
+}
+
+.hyperspace-active::after {
+    animation: earthApproach 5s forwards ease-in;
+}
+
+.hyperspace-active {
+    animation: reEntryShake 0.1s infinite;
+    /* Re-entry fire glow around the edges */
+    box-shadow: inset 0 0 200px rgba(255, 100, 0, 0);
+    transition: box-shadow 4s ease-in;
+}
+
+.hyperspace-active.hyperspace-active {
+    box-shadow: inset 0 0 300px rgba(255, 60, 0, 0.8);
+}
+
+/* --- KEYFRAMES --- */
+
+/* The Planet gets bigger and bigger until it fills the screen */
+@keyframes earthApproach {
+    0% {
+        transform: translate(-50%, -50%) scale(0.1);
+        opacity: 0;
+        border-radius: 50%;
+    }
+    20% {
+        opacity: 1;
+    }
+    80% {
+        border-radius: 20%; /* Starting to flatten out as we get close */
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(3); /* Zooming into the surface */
+        opacity: 1;
+        border-radius: 0%;
+        filter: brightness(1.5);
+    }
+}
+
+@keyframes zoomOut {
+    to { transform: scale(0); opacity: 0; filter: blur(20px); }
+}
+
+@keyframes reEntryShake {
+    0% { transform: translate(3px, 3px); }
+    50% { transform: translate(-3px, -5px); }
+    100% { transform: translate(2px, 3px); }
+}
+/* --- FLASHCARD PAGE STYLES --- */
+
+.orbit-header {
+    position: fixed;
+    top: 20px;
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 40px;
+    z-index: 100;
+}
+
+.level-badge, .streak-badge {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid #3b82f6;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: bold;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+}
+
+.streak-badge {
+    border-color: #ef4444;
+    color: #ef4444;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+}
+
+.orbit-container {
+    text-align: center;
+    max-width: 1000px;
+    margin-top: 120px;
+}
+
+.subtitle {
+    color: #93c5fd;
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+}
+
+.orbit-wrapper {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.input-panel {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(15px);
+    border: 2px solid #3b82f6;
+    border-radius: 25px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.2);
+}
+
+.main-panel { flex: 2; }
+.side-panel { flex: 1; }
+
+.input-panel label {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    color: #3b82f6;
+}
+
+textarea {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 15px;
+    padding: 15px;
+    color: white;
+    height: 150px;
+    resize: none;
+    margin-bottom: 20px;
+    outline: none;
+}
+
+textarea:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+}
+
+.tip-text {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 15px;
+}
+
+/* Flashcard Specific */
+.flashcard {
+    width: 400px;
+    height: 250px;
+    background: linear-gradient(145deg, #1e293b, #0f172a);
+    border: 2px solid #3b82f6;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 40px auto;
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.4);
+}
+/* --- KNOWLEDGE REACTOR / TEST PAGE STYLE --- */
+
+.top-nav {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 50px;
+    box-sizing: border-box;
+    z-index: 10;
+}
+
+.badge {
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border: 1px solid rgba(59, 130, 246, 0.5);
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(10px);
+}
+
+.level-pill { color: white; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+.streak-pill { color: #ff4d4d; border-color: #ff4d4d; box-shadow: 0 0 15px rgba(255, 77, 77, 0.2); }
+
+.glow-title {
+    font-size: 4.5rem;
+    font-weight: bold;
+    margin-top: 80px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+    letter-spacing: 2px;
+}
+
+.subtitle-text {
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 50px;
+    font-size: 1.1rem;
+}
+
+.orbit-grid-clean {
+    display: flex;
+    gap: 25px;
+    width: 950px;
+    justify-content: center;
+}
+
+.input-card, .upload-card {
+    background: rgba(15, 23, 42, 0.2);
+    border: 1.5px solid #3b82f6;
+    border-radius: 20px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 25px rgba(59, 130, 246, 0.1);
+}
+
+.input-card { flex: 1.6; }
+.upload-card { flex: 1; }
+
+label {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    color: #3b82f6;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.text-area-container {
+    background: rgba(2, 6, 23, 0.8);
+    border-radius: 15px;
+    padding: 15px;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    margin-bottom: 20px;
+}
+
+textarea {
+    width: 100%;
+    height: 200px;
+    background: transparent;
+    border: none;
+    color: #e2e8f0;
+    resize: none;
+    outline: none;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* The Exact Button Style from your Image */
+.generate-btn {
+    background: linear-gradient(90deg, #1e1b4b, #312e81);
+    border: 1px solid #4338ca;
+    color: white;
+    padding: 18px;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 1px;
+}
+
+.generate-btn:hover {
+    box-shadow: 0 0 30px rgba(67, 56, 202, 0.6);
+    transform: translateY(-3px);
+    background: linear-gradient(90deg, #2e2a75, #4338ca);
+}
+
+.upload-box-inner {
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 15px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.file-icon { font-size: 2rem; opacity: 0.5; color: #3b82f6; }
+
+.blue-outline-btn {
+    background: transparent;
+    border: 1.5px solid #3b82f6;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.blue-outline-btn:hover {
+    background: rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+}
+
+.small-tip {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.3);
+    margin-top: 15px;
+}
+/* --- SMART STUDY SPECIFIC OVERRIDE --- */
+
+/* If you want the 'Smart Study' button to look slightly different but keep the same style */
+.main-wrapper:has(h1:contains("Smart Study")) .generate-btn {
+    background: linear-gradient(90deg, #064e3b, #065f46); /* Dark Green/Teal for clarity */
+    border: 1px solid #059669;
+}
+
+/* Ensure the layout stays consistent with the Test and Flashcard pages */
+.main-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+}
+/* --- SCROLL FIX FOR FLASHCARDS --- */
+.orbit-container {
+    text-align: center;
+    max-width: 1000px;
+    margin-top: 120px;
+    padding-bottom: 150px; /* This adds space at the bottom so you can scroll */
+}
+
+body {
+    height: auto !important;
+    min-height: 100vh;
+    overflow-y: auto !important;
+}

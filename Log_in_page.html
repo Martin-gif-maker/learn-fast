@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+    <title>Pilot Login - Learn Fast</title>
+    <link rel="stylesheet" href="sigma.css">
+
+    <!-- 🚀 AUTO-CORRECTOR: Forces the page to run on the Python Server (Port 5001) -->
+    <script>
+        if ((window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") && window.location.port !== "5001") {
+            console.log("Wrong Port! Redirecting to Python Server...");
+            window.location.href = "http://127.0.0.1:5001" + window.location.pathname;
+        }
+    </script>
+
+    <style>
+        .lang-btn {
+            position: fixed;
+            top: 20px; right: 20px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #3b82f6; color: white;
+            padding: 10px 20px; border-radius: 50px;
+            cursor: pointer; z-index: 200; font-size: 1.2rem;
+            transition: 0.3s;
+        }
+        .lang-btn:hover { background: #3b82f6; }
+
+        /* Smooth message transition */
+        #pageTitle { margin-bottom: 10px; }
+        #statusText {
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            min-height: 20px;
+            transition: color 0.3s ease;
+        }
+    </style>
+</head>
+<body id="portal-body">
+
+    <button id="langBtn" class="lang-btn" onclick="toggleLanguage()">🇧🇬 BG</button>
+
+    <div class="login-panel" id="main-panel">
+        <div class="glow-edge"></div>
+
+        <h2 id="pageTitle">Access Your Learning Orbit</h2>
+
+        <!-- STATUS MESSAGE AREA -->
+        <p id="statusText" style="color: #3b82f6;">SYSTEM ONLINE</p>
+
+        <div class="terminal-form">
+            <div class="input-field">
+                <label id="labelId">IDENTIFICATION</label>
+                <input type="text" id="loginEmail" placeholder="EMAIL ADDRESS" required>
+            </div>
+
+            <div class="input-field">
+                <label id="labelPass">ACCESS KEY</label>
+                <input type="password" id="loginPass" placeholder="PASSWORD" required>
+            </div>
+
+            <button id="loginBtn" class="system-enter-btn">
+                Enter the System
+            </button>
+        </div>
+
+        <p class="signup-link">
+            <span id="linkText">New here?</span>
+            <a href="Sign-in-Page.html" id="linkAction">Create your account</a>
+        </p>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "Access Your Learning Orbit",
+                status: "SYSTEM ONLINE",
+                lId: "IDENTIFICATION", pId: "EMAIL ADDRESS",
+                lPass: "ACCESS KEY", pPass: "PASSWORD",
+                btn: "Enter the System",
+                linkText: "New here?", linkAction: "Create your account",
+                loading: "⏳ Verifying...",
+                alertFill: "Please enter credentials!",
+                alertErr: "Server Error. Is Python running?",
+                success: "ACCESS GRANTED"
+            },
+            bg: {
+                title: "Достъп до Твоята Орбита",
+                status: "СИСТЕМАТА Е ОНЛАЙН",
+                lId: "ИДЕНТИФИКАЦИЯ", pId: "ИМЕЙЛ АДРЕС",
+                lPass: "КОД ЗА ДОСТЪП", pPass: "ПАРОЛА",
+                btn: "Влез в Системата",
+                linkText: "Нов тук?", linkAction: "Създай акаунт",
+                loading: "⏳ Проверка...",
+                alertFill: "Моля въведете данни!",
+                alertErr: "Сървърна грешка. Работи ли Python?",
+                success: "ДОСТЪП РАЗРЕШЕН"
+            }
+        };
+
+        let currentLang = localStorage.getItem('appLang') || 'en';
+        applyLanguage();
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'bg' : 'en';
+            localStorage.setItem('appLang', currentLang);
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            const t = translations[currentLang];
+            document.getElementById('langBtn').innerText = currentLang === 'en' ? '🇧🇬 BG' : '🇬🇧 EN';
+
+            document.getElementById('pageTitle').innerText = t.title;
+
+            const statusEl = document.getElementById('statusText');
+            if (statusEl.style.color === 'rgb(59, 130, 246)' || statusEl.style.color === '#3b82f6') {
+                statusEl.innerText = t.status;
+            }
+
+            document.getElementById('labelId').innerText = t.lId;
+            document.getElementById('loginEmail').placeholder = t.pId;
+            document.getElementById('labelPass').innerText = t.lPass;
+            document.getElementById('loginPass').placeholder = t.pPass;
+            document.getElementById('loginBtn').innerText = t.btn;
+            document.getElementById('linkText').innerText = t.linkText;
+            document.getElementById('linkAction').innerText = t.linkAction;
+        }
+
+        function showMessage(msg, type) {
+            const el = document.getElementById('statusText');
+            el.innerText = msg;
+            if (type === 'error') el.style.color = '#ef4444'; // Red
+            else if (type === 'success') el.style.color = '#4ade80'; // Green
+            else el.style.color = '#3b82f6'; // Blue
+        }
+
+        const btn = document.getElementById('loginBtn');
+        const body = document.getElementById('portal-body');
+
+        btn.addEventListener('click', async () => {
+            const t = translations[currentLang];
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPass').value;
+
+            if(!email || !password) {
+                showMessage(t.alertFill, 'error');
+                return;
+            }
+
+            btn.innerText = t.loading;
+
+            try {
+                // The Auto-Corrector script ensures we are on port 5001,
+                // so this relative path works perfectly.
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (data.error) {
+                    showMessage(data.error, 'error');
+                    btn.innerText = t.btn;
+                } else {
+                    showMessage(t.success, 'success');
+                    localStorage.setItem("currentUser", JSON.stringify(data.user));
+                    body.classList.add('hyperspace-active');
+                    setTimeout(() => {
+                        window.location.href = "Main-Page.html";
+                    }, 800);
+                }
+            } catch (e) {
+                showMessage(t.alertErr, 'error');
+                btn.innerText = t.btn;
+            }
+        });
+    </script>
+</body>
+</html>

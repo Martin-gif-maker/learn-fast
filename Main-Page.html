@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+    <title>Learning Universe - Dashboard</title>
+    <link rel="stylesheet" href="sigma.css">
+
+    <!-- 🚀 AUTO-CORRECTOR: Forces the page to run on the Python Server (Port 5001) -->
+    <script>
+        if ((window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") && window.location.port !== "5001") {
+            console.log("Wrong Port! Redirecting to Python Server...");
+            window.location.href = "http://127.0.0.1:5001" + window.location.pathname;
+        }
+    </script>
+
+    <style>
+        .lang-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            z-index: 200;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+        .lang-btn:hover { background: #3b82f6; }
+    </style>
+</head>
+<body>
+
+    <button id="langBtn" class="lang-btn" onclick="toggleLanguage()">🇧🇬 BG</button>
+
+    <div class="learning-core-wrapper">
+        <div class="core-orb">
+            <div class="core-brain-icon">🧠</div>
+        </div>
+
+        <h2 id="welcomeText">Your Learning Core</h2>
+
+        <div class="stats-row">
+            <span><span id="lblLevel">LEVEL</span>: <strong id="userLevel">1</strong></span>
+            <span><span id="lblXP">XP</span>: <strong id="userXP">0</strong></span>
+        </div>
+
+        <div class="xp-bar-container">
+            <div class="xp-bar-fill" id="xpBar" style="width: 0%;"></div>
+        </div>
+
+        <p class="next-level-text" id="nextLevelText">👉 Next Level in 500 XP</p>
+
+        <button onclick="logout()" id="logoutBtn" style="margin-top:20px; border-color: red; color: red;">LOGOUT</button>
+    </div>
+
+    <div class="container">
+
+        <!-- CARD 1: FLASHCARDS -->
+        <div class="cyber-box">
+            <p id="c1Text">Flash cards</p>
+            <a href="Flash_cards.html">
+                <button id="c1Btn">Start Learning</button>
+            </a>
+        </div>
+
+        <!-- CARD 2: TEST -->
+        <div class="cyber-box">
+            <p id="c2Text">Test on subject</p>
+            <a href="Test_subject.html">
+                <button id="c2Btn">Take Test</button>
+            </a>
+        </div>
+
+        <!-- CARD 3: SIMPLIFIER -->
+        <div class="cyber-box">
+            <p id="c3Text">Study about anything</p>
+            <a href="text.html">
+                <button id="c3Btn">Smart Study</button>
+            </a>
+        </div>
+
+    </div>
+
+    <script>
+        // --- DATA & SETUP ---
+        const userJson = localStorage.getItem("currentUser");
+        const currentUser = userJson ? JSON.parse(userJson) : null;
+
+        // Redirect if not logged in
+        if (!currentUser) {
+            window.location.href = "Log_in_page.html";
+        }
+
+        // --- TRANSLATION CONFIG ---
+        const translations = {
+            en: {
+                welcome: "Welcome back, ",
+                level: "LEVEL",
+                xp: "XP",
+                next: "👉 Next Level in ",
+                xpUnit: " XP",
+                c1Text: "Flash cards",
+                c1Btn: "Start Learning",
+                c2Text: "Test on subject",
+                c2Btn: "Take Test",
+                c3Text: "Study about anything",
+                c3Btn: "Smart Study",
+                logout: "LOGOUT"
+            },
+            bg: {
+                welcome: "Добре дошъл, ",
+                level: "НИВО",
+                xp: "ТОЧКИ",
+                next: "👉 Следващо ниво след ",
+                xpUnit: " Т",
+                c1Text: "Флаш Карти",
+                c1Btn: "Започни Учене",
+                c2Text: "Тест по тема",
+                c2Btn: "Направи Тест",
+                c3Text: "Учи за всичко",
+                c3Btn: "Умно Учене",
+                logout: "ИЗХОД"
+            }
+        };
+
+        let currentLang = localStorage.getItem('appLang') || 'en';
+
+        // Initialize Page
+        updateStats();
+        applyLanguage();
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'bg' : 'en';
+            localStorage.setItem('appLang', currentLang);
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            const t = translations[currentLang];
+            const userName = currentUser ? currentUser.name : "Pilot";
+
+            // Update Text
+            document.getElementById('langBtn').innerText = currentLang === 'en' ? '🇧🇬 BG' : '🇬🇧 EN';
+            document.getElementById('welcomeText').innerText = t.welcome + userName + "!";
+            document.getElementById('lblLevel').innerText = t.level;
+            document.getElementById('lblXP').innerText = t.xp;
+
+            // Calculate remaining XP
+            const nextLvlXP = currentUser.level * 500;
+            const remaining = nextLvlXP - currentUser.xp;
+            document.getElementById('nextLevelText').innerText = t.next + remaining + t.xpUnit;
+
+            document.getElementById('c1Text').innerText = t.c1Text;
+            document.getElementById('c1Btn').innerText = t.c1Btn;
+            document.getElementById('c2Text').innerText = t.c2Text;
+            document.getElementById('c2Btn').innerText = t.c2Btn;
+            document.getElementById('c3Text').innerText = t.c3Text;
+            document.getElementById('c3Btn').innerText = t.c3Btn;
+            document.getElementById('logoutBtn').innerText = t.logout;
+        }
+
+        function updateStats() {
+            if(!currentUser) return;
+            document.getElementById("userLevel").innerText = currentUser.level;
+            document.getElementById("userXP").innerText = currentUser.xp;
+
+            // Calculate Bar Width
+            const currentLevelStart = (currentUser.level - 1) * 500;
+            const progress = currentUser.xp - currentLevelStart;
+            const percentage = Math.min(100, Math.max(5, (progress / 500) * 100));
+
+            document.getElementById("xpBar").style.width = percentage + "%";
+        }
+
+        function logout() {
+            localStorage.removeItem("currentUser");
+            window.location.href = "Log_in_page.html";
+        }
+    </script>
+</body>
+</html>

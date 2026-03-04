@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+    <title>Memory Orbit - Flashcards</title>
+    <link rel="stylesheet" href="sigma.css">
+
+    <!-- 🚀 AUTO-CORRECTOR: Forces the page to run on the Python Server (Port 5001) -->
+    <script>
+        if ((window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") && window.location.port !== "5001") {
+            console.log("Wrong Port! Redirecting to Python Server...");
+            window.location.href = "http://127.0.0.1:5001" + window.location.pathname;
+        }
+    </script>
+
+    <style>
+        /* --- LAYOUT STYLES --- */
+        .nav-btn {
+            position: fixed;
+            top: 20px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            z-index: 200;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 100px;
+        }
+        .nav-btn:hover { background: #3b82f6; }
+
+        /* Positions */
+        .btn-left { left: 20px; right: auto; }
+        .btn-right { right: 20px; left: auto; }
+
+        /* Center Stats */
+        .center-stats {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .badge {
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            backdrop-filter: blur(5px);
+            color: white;
+            white-space: nowrap;
+        }
+        .streak-pill { border-color: #ef4444; color: #ef4444; }
+
+        /* LABEL & COUNTER ROW FIX */
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body id="portal-body">
+
+    <!-- 1. LEFT: Back Button -->
+    <a href="Main-Page.html" class="nav-btn btn-left">⬅ Back</a>
+
+    <!-- 2. CENTER: XP & Level Stats -->
+    <div class="center-stats">
+        <div id="userStats" class="badge">Level 1 • 0 XP</div>
+        <div class="badge streak-pill">🔥 Streak</div>
+    </div>
+
+    <!-- 3. RIGHT: Language Button -->
+    <button id="langBtn" class="nav-btn btn-right" onclick="toggleLanguage()">🇧🇬 BG</button>
+
+    <div class="orbit-container">
+        <h1 id="pageTitle">Memory Orbit</h1>
+        <p class="subtitle" id="pageSubtitle">Turn your notes into smart flashcards.</p>
+
+        <div class="orbit-wrapper">
+            <div class="input-panel main-panel">
+
+                <!-- LABEL CONTAINER -->
+                <div class="label-row">
+                    <label id="inputLabel" style="margin:0;">PASTE YOUR NOTES</label>
+                    <span id="charCount" style="font-size: 0.8rem; color: #94a3b8;">0 / 5000</span>
+                </div>
+
+                <textarea id="userInput" maxlength="5000" placeholder="Paste your lesson, notes, or study material here..." oninput="updateCount(this)"></textarea>
+                <button id="generateBtn" class="launch-btn">👉 Generate Flashcards</button>
+            </div>
+        </div>
+
+        <div id="cardsArea" class="card-display" style="display:none; margin-top: 40px;"></div>
+    </div>
+
+    <script>
+        // --- CHAR COUNTER ---
+        function updateCount(textarea) {
+            const count = textarea.value.length;
+            const counter = document.getElementById('charCount');
+            counter.innerText = `${count} / 5000`;
+            counter.style.color = count >= 4900 ? "#ef4444" : "#94a3b8";
+        }
+
+        // --- TRANSLATION DATA ---
+        const translations = {
+            en: {
+                title: "Memory Orbit",
+                subtitle: "Turn your notes into smart flashcards.",
+                label: "PASTE YOUR NOTES",
+                placeholder: "Paste your lesson, notes, or study material here...",
+                btn: "👉 Generate Flashcards",
+                cardTitle: "Card",
+                showAns: "Show Answer",
+                hideAns: "Hide Answer",
+                loading: "🚀 Generating...",
+                alertText: "Please paste text first!",
+                back: "⬅ Back"
+            },
+            bg: {
+                title: "Орбита на Паметта",
+                subtitle: "Превърни записките си в умни карти.",
+                label: "ПОСТАВИ ЗАПИСКИ ТУК",
+                placeholder: "Постави урока или записките си тук...",
+                btn: "👉 Генерирай Карти",
+                cardTitle: "Карта",
+                showAns: "Покажи Отговор",
+                hideAns: "Скрий Отговор",
+                loading: "🚀 Генериране...",
+                alertText: "Моля постави текст!",
+                back: "⬅ Назад"
+            }
+        };
+
+        let currentLang = localStorage.getItem('appLang') || 'en';
+        applyLanguage();
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'bg' : 'en';
+            localStorage.setItem('appLang', currentLang);
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            const t = translations[currentLang];
+            document.getElementById('pageTitle').innerText = t.title;
+            document.getElementById('pageSubtitle').innerText = t.subtitle;
+            document.getElementById('inputLabel').innerText = t.label;
+            document.getElementById('userInput').placeholder = t.placeholder;
+            document.getElementById('generateBtn').innerText = t.btn;
+            document.getElementById('langBtn').innerText = currentLang === 'en' ? '🇧🇬 BG' : '🇬🇧 EN';
+            document.querySelector('.btn-left').innerText = t.back;
+        }
+
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        const statsBadge = document.getElementById("userStats");
+        if (currentUser) {
+            statsBadge.innerText = `Level ${currentUser.level} • ${currentUser.xp} XP`;
+        }
+
+        const btn = document.getElementById('generateBtn');
+        const input = document.getElementById('userInput');
+        const container = document.getElementById('cardsArea');
+
+        btn.addEventListener('click', async () => {
+            const text = input.value;
+            const t = translations[currentLang];
+
+            if (!text) return alert(t.alertText);
+
+            btn.innerText = t.loading;
+
+            try {
+                // FIXED URL (No localhost needed because Auto-Corrector puts us on the right port)
+                const response = await fetch('/api/flashcards', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: text, lang: currentLang })
+                });
+
+                const data = await response.json();
+                if (data.error) alert(data.error);
+                else renderCards(data.flashcards);
+            } catch (err) { alert("Server Error!"); }
+
+            btn.innerText = t.btn;
+        });
+
+        function renderCards(cards) {
+            container.innerHTML = "";
+            container.style.display = "block";
+            const t = translations[currentLang];
+
+            cards.forEach((card, index) => {
+                container.innerHTML += `
+                    <div class="flashcard" style="margin-bottom: 20px; height: auto; padding: 20px;">
+                        <div class="card-content">
+                            <h3 style="color:#3b82f6; margin-bottom:10px;">${t.cardTitle} ${index + 1}</h3>
+                            <p style="font-size: 1.2rem; margin-bottom: 15px;">${card.question}</p>
+                            <div class="answer-box" style="display:none; border-top: 1px solid #333; padding-top: 15px;">
+                                <p style="color: #4ade80; font-weight: bold; font-size: 1.1rem;">${card.answer}</p>
+                                <p style="color: #94a3b8; font-style: italic; font-size: 0.9rem;">${card.funny_note}</p>
+                            </div>
+                        </div>
+                        <button class="launch-btn" style="margin-top:10px;" onclick="toggleAns(this)">${t.showAns}</button>
+                    </div>`;
+            });
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function toggleAns(btn) {
+            const box = btn.previousElementSibling.querySelector('.answer-box');
+            const t = translations[currentLang];
+            if (box.style.display === 'none') {
+                box.style.display = 'block';
+                btn.innerText = t.hideAns;
+            } else {
+                box.style.display = 'none';
+                btn.innerText = t.showAns;
+            }
+        }
+    </script>
+</body>
+</html>
