@@ -6,7 +6,6 @@
     <title>Knowledge Reactor - Generate Test</title>
     <link rel="stylesheet" href="sigma.css">
 
-    <!-- 🚀 AUTO-CORRECTOR: Forces the page to run on the Python Server (Port 5001) -->
     <script>
         if ((window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") && window.location.port !== "5001") {
             console.log("Wrong Port! Redirecting to Python Server...");
@@ -180,7 +179,6 @@
             btn.innerText = t.loading;
 
             try {
-                // FIXED: Relative path works because we are on port 5001
                 const res = await fetch('/api/quiz', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -256,7 +254,6 @@
         async function saveXP(amount) {
             if(!currentUser) return;
             try {
-                // FIXED: Relative path
                 const res = await fetch('/api/update-xp', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
