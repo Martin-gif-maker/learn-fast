@@ -1,14 +1,10 @@
-/* 1. Page Setup - FIXED for Scrolling */
 body {
     margin: 0;
     padding: 0;
     background-color: #020617;
-
-    /* Change height to min-height so the page can grow */
     min-height: 100vh;
     height: auto;
 
-    /* Allow standard scrolling */
     overflow-y: auto;
     overflow-x: hidden;
 
@@ -16,41 +12,32 @@ body {
     flex-direction: column;
     align-items: center;
 
-    /* CHANGED: Start from top, don't force center vertically */
     justify-content: flex-start;
 
     font-family: 'Segoe UI', sans-serif;
     color: white;
 
-    /* Add padding at the bottom so you can scroll past the last card */
     padding-bottom: 100px;
 }
-/* 2. The Spinning Galaxy Layer - MASSIVE (500%) & FIXED */
 body::before {
     content: "";
 
-    /* Locks it to the screen so it doesn't move when you scroll down */
     position: fixed;
 
-    /* This centers the massive 500% box */
     top: -200%;
     left: -200%;
 
-    /* 5x Bigger than your screen */
     width: 500%;
     height: 500%;
 
-    /* The Galaxy Gradient & Stars */
     background: radial-gradient(circle at center,
-        rgba(59, 130, 246, 0.3) 0%,      /* Brighter center */
-        rgba(139, 92, 246, 0.15) 30%,    /* Wider spread */
+        rgba(59, 130, 246, 0.3) 0%,    
+        rgba(139, 92, 246, 0.15) 30%,   
         transparent 70%),
     url('https://www.transparenttextures.com/patterns/stardust.png');
 
-    /* Make the stars repeat so it's not empty */
     background-repeat: repeat;
 
-    /* Very slow rotation */
     animation: rotateGalaxy 240s linear infinite;
     z-index: -1;
 }
@@ -66,16 +53,14 @@ body::before {
     to { transform: rotate(360deg); }
 }
 
-/* 3. Title Spacing - Added the gaps you asked for */
 h1 {
-    margin-top: 200px !important;   /* Space from top of screen to title */
-    margin-bottom: 80px;  /* Space from title to the first box */
+    margin-top: 200px !important;  
+    margin-bottom: 80px; 
     text-align: center;
     font-size: 70px;
     text-shadow: 0 0 15px #3b82f6;
 }
 
-/* 4. The Separated Paragraph Boxes */
 .main-wrapper {
     display: flex;
     flex-direction: column;
@@ -104,7 +89,6 @@ h1 {
     margin: 0;
 }
 
-/* 5. First Page Elements (Kept for your main menu) */
 .container {
     display: flex;
     justify-content: center;
@@ -138,10 +122,10 @@ button {
     font-weight: bold;
 }
 .back-btn-container {
-    position: absolute; /* Place it relative to the top of the page */
+    position: absolute; 
     top: 20px;
     left: 20px;
-    text-decoration: none; /* Removes the underline from the link */
+    text-decoration: none; 
 }
 
 .back-button {
@@ -162,7 +146,6 @@ button {
     box-shadow: 0 0 20px #3b82f6;
 }
 
-/* Container to keep the hologram centered */
 .portal-container {
     height: 100vh;
     display: flex;
@@ -171,12 +154,11 @@ button {
     width: 100%;
 }
 
-/* The Holographic Glass Panel */
 .hologram-card {
     width: 400px;
     padding: 40px;
-    background: rgba(15, 23, 42, 0.6); /* Transparent dark blue */
-    backdrop-filter: blur(15px);        /* This creates the 'glass' effect */
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(15px);        
     border: 1px solid rgba(59, 130, 246, 0.5);
     border-radius: 20px;
     box-shadow: 0 0 40px rgba(59, 130, 246, 0.2),
@@ -186,7 +168,6 @@ button {
     overflow: hidden;
 }
 
-/* Futuristic Scanning Line */
 .scanner-line {
     position: absolute;
     top: 0;
@@ -214,12 +195,11 @@ button {
 
 .status-text {
     font-size: 0.7rem;
-    color: #10b981; /* Green for 'Ready' */
+    color: #10b981; 
     letter-spacing: 3px;
     margin-bottom: 30px;
 }
 
-/* Form Styling */
 .input-group {
     text-align: left;
     margin-bottom: 20px;
@@ -248,7 +228,6 @@ button {
     box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
 }
 
-/* Launch Button */
 .launch-btn {
     width: 100%;
     padding: 15px;
@@ -284,7 +263,6 @@ button {
 .footer-links a:hover {
     color: #3b82f6;
 }
-/* Center the panel on the screen */
 body {
     display: flex;
     justify-content: center;
@@ -293,21 +271,20 @@ body {
     margin: 0;
 }
 
-/* The Glass Panel */
 .login-panel {
     width: 380px;
-    background: rgba(2, 6, 23, 0.85); /* Almost black glass */
-    backdrop-filter: blur(20px);      /* Deep blur for that glass look */
+    background: rgba(2, 6, 23, 0.85); 
+    backdrop-filter: blur(20px);     
     padding: 50px 40px;
     border-radius: 30px;
-    border: 1px solid rgba(59, 130, 246, 0.5); /* Neon blue border */
+    border: 1px solid rgba(59, 130, 246, 0.5); 
     position: relative;
     box-shadow: 0 0 30px rgba(59, 130, 246, 0.2);
     text-align: center;
     overflow: hidden;
 }
 
-/* Sci-fi UI animated line on the edge */
+
 .login-panel::before {
     content: "";
     position: absolute;
@@ -333,7 +310,6 @@ body {
     text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
 }
 
-/* Terminal Style Inputs */
 .input-field {
     text-align: left;
     margin-bottom: 25px;
@@ -354,8 +330,8 @@ body {
     border: 1px solid rgba(59, 130, 246, 0.3);
     padding: 12px;
     border-radius: 8px;
-    color: #93c5fd; /* Light blue text */
-    font-family: monospace; /* Terminal feel */
+    color: #93c5fd;
+    font-family: monospace; 
     outline: none;
     transition: 0.3s;
 }
@@ -365,7 +341,7 @@ body {
     box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
 }
 
-/* The Big Glowing Button */
+
 .system-enter-btn {
     width: 100%;
     padding: 15px;
@@ -404,9 +380,6 @@ body {
 .signup-link a:hover {
     text-decoration: underline;
 }
-/* Add this to your existing sigma.css */
-
-/* Purple tint for the Registration status */
 .status-text {
     font-size: 0.7rem;
     letter-spacing: 2px;
@@ -414,9 +387,8 @@ body {
     font-weight: bold;
 }
 
-/* Specific styling for the Launch button */
 .launch-btn {
-    border-color: #8b5cf6 !important; /* Purple glow for 'Launch' */
+    border-color: #8b5cf6 !important;
     color: #8b5cf6 !important;
 }
 
@@ -426,7 +398,6 @@ body {
     box-shadow: 0 0 30px #8b5cf6 !important;
 }
 
-/* Ensure inputs in the sign-up form look consistent */
 .terminal-form .input-field input:focus {
     border-color: #8b5cf6;
     box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
@@ -438,7 +409,6 @@ body {
     z-index: 10;
 }
 
-/* The Floating Orb */
 .core-orb {
     width: 100px;
     height: 100px;
@@ -478,7 +448,6 @@ body {
     text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
 }
 
-/* Progress Bar Styling */
 .xp-bar-container {
     width: 300px;
     height: 12px;
@@ -503,9 +472,6 @@ body {
     color: rgba(255, 255, 255, 0.7);
     font-style: italic;
 }
-/* --- HYPERSPACE ANIMATION SECTION --- */
-
-/* 1. The Earth Overlay (Hidden by default) */
 body::after {
     content: "";
     position: fixed;
@@ -521,7 +487,6 @@ body::after {
     z-index: 9999;
 }
 
-/* 2. Warp Effect Styles */
 .hyperspace-active #main-panel {
     transition: transform 0.6s cubic-bezier(0.6, -0.28, 0.735, 0.045), opacity 0.4s;
     transform: scale(0) rotate(10deg);
@@ -536,7 +501,6 @@ body::after {
     opacity: 1;
 }
 
-/* 3. The "Super Speed" Motion Blur Animation */
 @keyframes warpSpeed {
     0% {
         transform: scale(1) rotate(0deg);
@@ -552,7 +516,6 @@ body::after {
     }
 }
 
-/* 4. Smooth Transition for the Body */
 #portal-body {
     transition: background-color 0.8s;
 }
@@ -560,15 +523,11 @@ body::after {
 .hyperspace-active {
     background-color: white !important;
 }
-/* --- HYPERSPACE ANIMATION SYSTEM --- */
-
-/* 1. Ensure the body can handle the zoom */
 #portal-body {
     transition: background-color 0.8s ease-in;
-    perspective: 1000px; /* Adds 3D depth to the warp */
+    perspective: 1000px; 
 }
 
-/* 2. The Earth "Landing" Layer */
 #portal-body::after {
     content: "";
     position: fixed;
@@ -576,7 +535,6 @@ body::after {
     left: 0;
     width: 100%;
     height: 100%;
-    /* High-quality Earth image */
     background: url('https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?q=80&w=2000') no-repeat center center;
     background-size: cover;
     opacity: 0;
@@ -585,23 +543,19 @@ body::after {
     z-index: 9999;
 }
 
-/* 3. When animation triggers: Shrink the Login Box */
 .hyperspace-active .login-panel {
     pointer-events: none;
     animation: shrinkOut 0.8s forwards cubic-bezier(0.6, -0.28, 0.735, 0.045);
 }
 
-/* 4. When animation triggers: Warp the Galaxy */
 .hyperspace-active::before {
     animation: warpDrive 0.8s forwards !important;
 }
 
-/* 5. Show Earth at the very end */
 .hyperspace-active::after {
     opacity: 1;
 }
 
-/* --- KEYFRAMES --- */
 
 @keyframes shrinkOut {
     0% { transform: scale(1) translateZ(0); opacity: 1; }
@@ -617,14 +571,11 @@ body::after {
         filter: blur(15px) brightness(2);
     }
     100% {
-        transform: scale(10); /* Huge zoom for speed effect */
+        transform: scale(10);
         filter: blur(60px) brightness(5);
         background: white;
     }
 }
-/* --- EARTH DESCENT ANIMATION --- */
-
-/* 1. The Earth Planet (Approaching) */
 #portal-body::after {
     content: "";
     position: fixed;
@@ -634,7 +585,7 @@ body::after {
     height: 100vw;
     background: url('https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?q=80&w=2000') no-repeat center center;
     background-size: cover;
-    border-radius: 50%; /* Makes it look like a planet first */
+    border-radius: 50%; 
     transform: translate(-50%, -50%) scale(0);
     opacity: 0;
     z-index: 10000;
@@ -642,12 +593,10 @@ body::after {
     box-shadow: 0 0 100px rgba(59, 130, 246, 0.5);
 }
 
-/* 2. Atmosphere Re-entry Glow (The Fire) */
 #portal-body::before {
     transition: all 0.5s ease;
 }
 
-/* 3. The Animation Sequence */
 .hyperspace-active .login-panel {
     animation: zoomOut 1s forwards;
 }
@@ -658,7 +607,6 @@ body::after {
 
 .hyperspace-active {
     animation: reEntryShake 0.1s infinite;
-    /* Re-entry fire glow around the edges */
     box-shadow: inset 0 0 200px rgba(255, 100, 0, 0);
     transition: box-shadow 4s ease-in;
 }
@@ -667,9 +615,6 @@ body::after {
     box-shadow: inset 0 0 300px rgba(255, 60, 0, 0.8);
 }
 
-/* --- KEYFRAMES --- */
-
-/* The Planet gets bigger and bigger until it fills the screen */
 @keyframes earthApproach {
     0% {
         transform: translate(-50%, -50%) scale(0.1);
@@ -680,10 +625,10 @@ body::after {
         opacity: 1;
     }
     80% {
-        border-radius: 20%; /* Starting to flatten out as we get close */
+        border-radius: 20%; 
     }
     100% {
-        transform: translate(-50%, -50%) scale(3); /* Zooming into the surface */
+        transform: translate(-50%, -50%) scale(3);
         opacity: 1;
         border-radius: 0%;
         filter: brightness(1.5);
@@ -699,7 +644,6 @@ body::after {
     50% { transform: translate(-3px, -5px); }
     100% { transform: translate(2px, 3px); }
 }
-/* --- FLASHCARD PAGE STYLES --- */
 
 .orbit-header {
     position: fixed;
@@ -790,7 +734,6 @@ textarea:focus {
     margin-top: 15px;
 }
 
-/* Flashcard Specific */
 .flashcard {
     width: 400px;
     height: 250px;
@@ -804,7 +747,6 @@ textarea:focus {
     margin: 40px auto;
     box-shadow: 0 0 40px rgba(59, 130, 246, 0.4);
 }
-/* --- KNOWLEDGE REACTOR / TEST PAGE STYLE --- */
 
 .top-nav {
     position: absolute;
@@ -893,7 +835,6 @@ textarea {
     line-height: 1.5;
 }
 
-/* The Exact Button Style from your Image */
 .generate-btn {
     background: linear-gradient(90deg, #1e1b4b, #312e81);
     border: 1px solid #4338ca;
@@ -947,15 +888,10 @@ textarea {
     color: rgba(255, 255, 255, 0.3);
     margin-top: 15px;
 }
-/* --- SMART STUDY SPECIFIC OVERRIDE --- */
-
-/* If you want the 'Smart Study' button to look slightly different but keep the same style */
 .main-wrapper:has(h1:contains("Smart Study")) .generate-btn {
-    background: linear-gradient(90deg, #064e3b, #065f46); /* Dark Green/Teal for clarity */
+    background: linear-gradient(90deg, #064e3b, #065f46); 
     border: 1px solid #059669;
 }
-
-/* Ensure the layout stays consistent with the Test and Flashcard pages */
 .main-wrapper {
     display: flex;
     flex-direction: column;
@@ -964,12 +900,11 @@ textarea {
     min-height: 100vh;
     text-align: center;
 }
-/* --- SCROLL FIX FOR FLASHCARDS --- */
 .orbit-container {
     text-align: center;
     max-width: 1000px;
     margin-top: 120px;
-    padding-bottom: 150px; /* This adds space at the bottom so you can scroll */
+    padding-bottom: 150px;
 }
 
 body {
