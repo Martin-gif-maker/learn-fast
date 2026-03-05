@@ -6,7 +6,6 @@
     <title>Smart Study - Text Simplifier</title>
     <link rel="stylesheet" href="sigma.css">
 
-    <!-- 🚀 AUTO-CORRECTOR: Forces the page to run on the Python Server (Port 5001) -->
     <script>
         if ((window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") && window.location.port !== "5001") {
             console.log("Wrong Port! Redirecting to Python Server...");
@@ -60,7 +59,6 @@
         }
         .streak-pill { border-color: #ef4444; color: #ef4444; }
 
-        /* LABEL FIX */
         .label-row {
             display: flex;
             justify-content: space-between;
@@ -88,7 +86,6 @@
         <div class="orbit-grid-clean">
             <div class="input-card">
 
-                <!-- NEW LABEL ROW -->
                 <div class="label-row">
                     <label id="inputLabel" style="margin:0;">PASTE COMPLEX TEXT</label>
                     <span id="charCount" style="font-size: 0.8rem; color: #94a3b8;">0 / 5000</span>
@@ -179,7 +176,6 @@
             btn.innerText = t.loading;
 
             try {
-                // FIXED: Relative path URL
                 const res = await fetch('/api/simplify', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
