@@ -6,7 +6,6 @@
     <title>Learning Universe - Dashboard</title>
     <link rel="stylesheet" href="sigma.css">
 
-    <!-- 🚀 AUTO-CORRECTOR: Forces the page to run on the Python Server (Port 5001) -->
     <script>
         if ((window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") && window.location.port !== "5001") {
             console.log("Wrong Port! Redirecting to Python Server...");
@@ -59,7 +58,6 @@
 
     <div class="container">
 
-        <!-- CARD 1: FLASHCARDS -->
         <div class="cyber-box">
             <p id="c1Text">Flash cards</p>
             <a href="Flash_cards.html">
@@ -67,15 +65,12 @@
             </a>
         </div>
 
-        <!-- CARD 2: TEST -->
         <div class="cyber-box">
             <p id="c2Text">Test on subject</p>
             <a href="Test_subject.html">
                 <button id="c2Btn">Take Test</button>
             </a>
         </div>
-
-        <!-- CARD 3: SIMPLIFIER -->
         <div class="cyber-box">
             <p id="c3Text">Study about anything</p>
             <a href="text.html">
@@ -86,16 +81,13 @@
     </div>
 
     <script>
-        // --- DATA & SETUP ---
         const userJson = localStorage.getItem("currentUser");
         const currentUser = userJson ? JSON.parse(userJson) : null;
 
-        // Redirect if not logged in
         if (!currentUser) {
             window.location.href = "Log_in_page.html";
         }
 
-        // --- TRANSLATION CONFIG ---
         const translations = {
             en: {
                 welcome: "Welcome back, ",
@@ -129,7 +121,6 @@
 
         let currentLang = localStorage.getItem('appLang') || 'en';
 
-        // Initialize Page
         updateStats();
         applyLanguage();
 
@@ -143,13 +134,11 @@
             const t = translations[currentLang];
             const userName = currentUser ? currentUser.name : "Pilot";
 
-            // Update Text
             document.getElementById('langBtn').innerText = currentLang === 'en' ? '🇧🇬 BG' : '🇬🇧 EN';
             document.getElementById('welcomeText').innerText = t.welcome + userName + "!";
             document.getElementById('lblLevel').innerText = t.level;
             document.getElementById('lblXP').innerText = t.xp;
 
-            // Calculate remaining XP
             const nextLvlXP = currentUser.level * 500;
             const remaining = nextLvlXP - currentUser.xp;
             document.getElementById('nextLevelText').innerText = t.next + remaining + t.xpUnit;
@@ -168,7 +157,6 @@
             document.getElementById("userLevel").innerText = currentUser.level;
             document.getElementById("userXP").innerText = currentUser.xp;
 
-            // Calculate Bar Width
             const currentLevelStart = (currentUser.level - 1) * 500;
             const progress = currentUser.xp - currentLevelStart;
             const percentage = Math.min(100, Math.max(5, (progress / 500) * 100));
