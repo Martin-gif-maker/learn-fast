@@ -6,7 +6,6 @@
     <title>Create Star Profile - Learn Fast</title>
     <link rel="stylesheet" href="sigma.css">
 
-    <!-- 🚀 AUTO-CORRECTOR: Forces the page to run on the Python Server (Port 5001) -->
     <script>
         if ((window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") && window.location.port !== "5001") {
             console.log("Wrong Port! Redirecting to Python Server...");
@@ -28,7 +27,7 @@
 
         .hidden { display: none; }
 
-        /* Smooth transition for messages */
+        /* Smooth transition for messages *
         #statusText { transition: color 0.3s ease; }
     </style>
 </head>
@@ -41,12 +40,10 @@
 
         <h2 id="pageTitle">Create Your Star Profile</h2>
 
-        <!-- STATUS MESSAGE AREA -->
         <p id="statusText" class="status-text" style="color: #8b5cf6; min-height: 20px;">REGISTRATION PROTOCOL ACTIVE</p>
 
         <div class="terminal-form">
 
-            <!-- STEP 1: DETAILS -->
             <div id="step1">
                 <div class="input-field">
                     <label id="labelName">PILOT NAME</label>
@@ -68,7 +65,6 @@
                 </button>
             </div>
 
-            <!-- STEP 2: CODE VERIFICATION (Hidden at start) -->
             <div id="step2" class="hidden">
                 <div class="input-field">
                     <label id="labelCode" style="color: #4ade80;">ENTER 6-DIGIT CODE</label>
@@ -163,7 +159,6 @@
             else el.style.color = '#8b5cf6';
         }
 
-        // --- STEP 1: SEND CODE ---
         const btn1 = document.getElementById('getCodeBtn');
         const btn2 = document.getElementById('verifyBtn');
         const step1 = document.getElementById('step1');
@@ -183,8 +178,6 @@
             btn1.innerText = t.sending;
 
             try {
-                // Because of the Auto-Corrector script at the top,
-                // we can safely use relative paths like /api/...
                 const res = await fetch('/api/send-code', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
@@ -207,7 +200,6 @@
             }
         });
 
-        // --- STEP 2: VERIFY & REGISTER ---
         btn2.addEventListener('click', async () => {
             const t = translations[currentLang];
             const code = document.getElementById('regCode').value;
