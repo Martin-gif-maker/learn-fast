@@ -6,7 +6,6 @@
     <title>Pilot Login - Learn Fast</title>
     <link rel="stylesheet" href="sigma.css">
 
-    <!-- 🚀 AUTO-CORRECTOR: Forces the page to run on the Python Server (Port 5001) -->
     <script>
         if ((window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") && window.location.port !== "5001") {
             console.log("Wrong Port! Redirecting to Python Server...");
@@ -26,7 +25,6 @@
         }
         .lang-btn:hover { background: #3b82f6; }
 
-        /* Smooth message transition */
         #pageTitle { margin-bottom: 10px; }
         #statusText {
             margin-bottom: 30px;
@@ -46,7 +44,6 @@
 
         <h2 id="pageTitle">Access Your Learning Orbit</h2>
 
-        <!-- STATUS MESSAGE AREA -->
         <p id="statusText" style="color: #3b82f6;">SYSTEM ONLINE</p>
 
         <div class="terminal-form">
@@ -152,8 +149,6 @@
             btn.innerText = t.loading;
 
             try {
-                // The Auto-Corrector script ensures we are on port 5001,
-                // so this relative path works perfectly.
                 const res = await fetch('/api/login', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
