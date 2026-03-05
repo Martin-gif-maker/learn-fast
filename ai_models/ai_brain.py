@@ -2,38 +2,30 @@ import requests
 import json
 
 
-# --- 1. AUTO-DISCOVERY FUNCTION (Fixed Name) ---
 def get_best_model(api_key):
     """Finds the best available model for your key."""
     url = f"https://generativelanguage.googleapis.com/v1beta/models?key={api_key}"
     try:
         response = requests.get(url)
         if response.status_code != 200:
-            # If we can't check, default to the most common one
             return "gemini-1.5-flash"
 
         data = response.json()
-        # Filter for models that support generating content
         models = [m['name'].replace("models/", "") for m in data.get('models', []) if
                   'generateContent' in m.get('supportedGenerationMethods', [])]
 
-        # Priority List: Try Flash first, then Pro
         for m in models:
             if "flash" in m and "8b" not in m: return m
         for m in models:
             if "pro" in m: return m
 
-        # If list exists but no match, return first available
         return models[0] if models else "gemini-1.5-flash"
     except:
         return "gemini-1.5-flash"
 
-
-# --- 2. CORE GOOGLE FUNCTION ---
 def ask_google(api_key, prompt, system_instruction):
     if not api_key: return {"error": "API Key is missing."}
 
-    # Now this call will work because the name matches above
     model = get_best_model(api_key)
     print(f"🚀 USING MODEL: {model}")
 
@@ -60,14 +52,12 @@ def ask_google(api_key, prompt, system_instruction):
         return {"error": str(e)}
 
 
-# --- HELPER FOR LANGUAGE ---
 def get_lang_instruction(lang):
     if lang == 'bg':
         return " IMPORTANT: The content MUST be in BULGARIAN language. Keep the JSON keys in English, but the values in Bulgarian."
     return ""
 
 
-# --- 3. FEATURE FUNCTIONS ---
 
 def generate_flashcards(api_key, text, lang='en'):
     lang_note = get_lang_instruction(lang)
