@@ -7,12 +7,10 @@ from email.message import EmailMessage
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 
-# --- PATH SETUP ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 AI_FOLDER = os.path.join(BASE_DIR, 'ai_models')
 sys.path.append(AI_FOLDER)
 
-# Try to import your AI brain
 try:
     from ai_brain import generate_flashcards, generate_quiz, simplify_text
 except ImportError:
@@ -20,15 +18,12 @@ except ImportError:
         from ai_models.ai_brain import generate_flashcards, generate_quiz, simplify_text
     except ImportError:
         print("⚠️ WARNING: Could not find 'ai_brain.py'. AI features might fail.")
-        # Dummy functions to prevent server crash if file is missing
         def generate_flashcards(k, t, l): return {"flashcards": []}
         def generate_quiz(k, t, l): return {"quiz": []}
         def simplify_text(k, t, l): return {"simplified_content": "AI Error", "key_points": []}
 
 app = Flask(__name__)
-CORS(app) # Allows browser to talk to server easily
-
-# --- CONFIG ---
+CORS(app) 
 API_KEY = "AIzaSyAvwquAuou9BSnNhuHq3BVmVeQkPvJqjXI"
 DB_FILE = os.path.join(BASE_DIR, "learnfast.db")
 SENDER_EMAIL = "learnfast86@gmail.com"
@@ -71,7 +66,6 @@ def send_code_via_email(to_email, code):
         print(f"❌ Email Error: {e}")
         return False
 
-# --- WEB ROUTES (FRONTEND) ---
 @app.route('/')
 def home():
     return send_from_directory(BASE_DIR, 'First_page.html')
@@ -80,7 +74,6 @@ def home():
 def serve_static(filename):
     return send_from_directory(BASE_DIR, filename)
 
-# --- API ROUTES (BACKEND) ---
 @app.route('/api/send-code', methods=['POST'])
 def send_verification_code():
     data = request.json
@@ -99,14 +92,12 @@ def send_verification_code():
     if send_code_via_email(email, code):
         return jsonify({"message": "Code sent"})
     else:
-        # For testing, if email fails, print code to terminal so you can still log in
         print(f"⚠️ Email failed. CODE FOR {email}: {code}")
         return jsonify({"message": "Email failed (Check Terminal for Code)"})
 
 @app.route('/api/register', methods=['POST'])
 def register():
     data = request.json
-    # Check code
     if data['email'] not in verification_codes or verification_codes[data['email']] != data['code']:
         return jsonify({"error": "Invalid Code!"}), 400
 
@@ -166,6 +157,5 @@ def simplify_route():
     return jsonify(simplify_text(API_KEY, request.json.get('text', ''), request.json.get('lang', 'en')))
 
 if __name__ == '__main__':
-    # Force Port 5001 for Mac compatibility
     print("🚀 Server starting on http://127.0.0.1:5001")
     app.run(host='0.0.0.0', port=5001, debug=True)
