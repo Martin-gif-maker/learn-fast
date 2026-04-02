@@ -5,15 +5,6 @@
     <meta name="google" content="notranslate">
     <title>Smart Study - Text Simplifier</title>
     <link rel="stylesheet" href="sigma.css">
-
-    <!-- 🚀 AUTO-CORRECTOR: Forces the page to run on the Python Server (Port 5001) -->
-    <script>
-        if ((window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") && window.location.port !== "5001") {
-            console.log("Wrong Port! Redirecting to Python Server...");
-            window.location.href = "http://127.0.0.1:5001" + window.location.pathname;
-        }
-    </script>
-
     <style>
         .nav-btn {
             position: fixed;
@@ -34,33 +25,8 @@
             min-width: 100px;
         }
         .nav-btn:hover { background: #3b82f6; }
-
         .btn-left { left: 20px; right: auto; }
         .btn-right { right: 20px; left: auto; }
-
-        .center-stats {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-            z-index: 100;
-        }
-
-        .badge {
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-weight: bold;
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid rgba(59, 130, 246, 0.5);
-            backdrop-filter: blur(5px);
-            color: white;
-            white-space: nowrap;
-        }
-        .streak-pill { border-color: #ef4444; color: #ef4444; }
-
-        /* LABEL FIX */
         .label-row {
             display: flex;
             justify-content: space-between;
@@ -73,12 +39,6 @@
 <body id="portal-body">
 
     <a href="Main-Page.html" class="nav-btn btn-left">⬅ Back</a>
-
-    <div class="center-stats">
-        <div id="userStats" class="badge">Level 1 • 0 XP</div>
-        <div class="badge streak-pill">🔥 Streak</div>
-    </div>
-
     <button id="langBtn" class="nav-btn btn-right" onclick="toggleLanguage()">🇧🇬 BG</button>
 
     <div class="main-wrapper">
@@ -87,13 +47,10 @@
 
         <div class="orbit-grid-clean">
             <div class="input-card">
-
-                <!-- NEW LABEL ROW -->
                 <div class="label-row">
                     <label id="inputLabel" style="margin:0;">PASTE COMPLEX TEXT</label>
                     <span id="charCount" style="font-size: 0.8rem; color: #94a3b8;">0 / 5000</span>
                 </div>
-
                 <div class="text-area-container">
                     <textarea id="simInput" maxlength="5000" placeholder="Paste a difficult paragraph, long article, or confusing notes here..." oninput="updateCount(this)"></textarea>
                 </div>
@@ -124,7 +81,7 @@
                 label: "PASTE COMPLEX TEXT",
                 placeholder: "Paste a difficult paragraph...",
                 btn: "👉 SIMPLIFY TEXT",
-                loading: "🚀 Making it funny...",
+                loading: "🚀 Making it simple...",
                 pointsTitle: "🚀 Key Takeaways:",
                 alertText: "Please paste text first!",
                 back: "⬅ Back"
@@ -163,10 +120,6 @@
             document.querySelector('.btn-left').innerText = t.back;
         }
 
-        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        const statsBadge = document.getElementById("userStats");
-        if (currentUser) statsBadge.innerText = `Level ${currentUser.level} • ${currentUser.xp} XP`;
-
         const btn = document.getElementById('simBtn');
         const input = document.getElementById('simInput');
         const container = document.getElementById('simContainer');
@@ -174,27 +127,21 @@
         btn.addEventListener('click', async () => {
             const text = input.value;
             const t = translations[currentLang];
-
             if (!text) return alert(t.alertText);
             btn.innerText = t.loading;
-
             try {
-                // FIXED: Relative path URL
                 const res = await fetch('/api/simplify', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ text: text, lang: currentLang })
                 });
-
                 const data = await res.json();
-
                 if (data.error) {
                     alert(data.error);
                 } else {
                     container.style.display = "block";
                     document.getElementById('simTitle').innerText = data.summary_title;
                     document.getElementById('simContent').innerText = data.simplified_content;
-
                     const list = document.getElementById('simPoints');
                     list.innerHTML = "";
                     data.key_points.forEach(point => {
@@ -202,7 +149,6 @@
                     });
                     container.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
-
             } catch (e) { alert("Server Error (Is Python running?)"); }
             btn.innerText = t.btn;
         });

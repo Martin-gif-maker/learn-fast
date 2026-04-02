@@ -5,18 +5,6 @@
     <meta name="google" content="notranslate">
     <title>Learn Fast</title>
     <link rel="stylesheet" href="sigma.css">
-
-    <!-- 🚀 AUTO-CORRECT SCRIPT: Ensures you are on the Python Server -->
-    <script>
-        // If the user is NOT on port 5001, send them there immediately.
-        if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
-            if (window.location.port !== "5001") {
-                console.log("Wrong Port Detected! Redirecting to Python Server...");
-                window.location.href = "http://127.0.0.1:5001/First_page.html";
-            }
-        }
-    </script>
-
     <style>
         .lang-btn {
             position: fixed;
@@ -44,7 +32,7 @@
     <div class="container">
         <div class="cyber-box">
             <p id="box1Text">Do you want to start your journey?</p>
-            <a href="Log_in_page.html">
+            <a href="Main-Page.html">
                 <button id="box1Btn">Start journey</button>
             </a>
         </div>
@@ -98,7 +86,6 @@
         function applyLanguage() {
             const t = translations[currentLang];
             document.getElementById('langBtn').innerText = currentLang === 'en' ? '🇧🇬 BG' : '🇬🇧 EN';
-
             document.getElementById('mainTitle').innerText = t.title;
             document.getElementById('box1Text').innerText = t.b1Text;
             document.getElementById('box1Btn').innerText = t.b1Btn;

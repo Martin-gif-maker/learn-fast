@@ -5,17 +5,7 @@
     <meta name="google" content="notranslate">
     <title>Memory Orbit - Flashcards</title>
     <link rel="stylesheet" href="sigma.css">
-
-    <!-- 🚀 AUTO-CORRECTOR: Forces the page to run on the Python Server (Port 5001) -->
-    <script>
-        if ((window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") && window.location.port !== "5001") {
-            console.log("Wrong Port! Redirecting to Python Server...");
-            window.location.href = "http://127.0.0.1:5001" + window.location.pathname;
-        }
-    </script>
-
     <style>
-        /* --- LAYOUT STYLES --- */
         .nav-btn {
             position: fixed;
             top: 20px;
@@ -35,35 +25,8 @@
             min-width: 100px;
         }
         .nav-btn:hover { background: #3b82f6; }
-
-        /* Positions */
         .btn-left { left: 20px; right: auto; }
         .btn-right { right: 20px; left: auto; }
-
-        /* Center Stats */
-        .center-stats {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-            z-index: 100;
-        }
-
-        .badge {
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-weight: bold;
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid rgba(59, 130, 246, 0.5);
-            backdrop-filter: blur(5px);
-            color: white;
-            white-space: nowrap;
-        }
-        .streak-pill { border-color: #ef4444; color: #ef4444; }
-
-        /* LABEL & COUNTER ROW FIX */
         .label-row {
             display: flex;
             justify-content: space-between;
@@ -75,16 +38,7 @@
 </head>
 <body id="portal-body">
 
-    <!-- 1. LEFT: Back Button -->
     <a href="Main-Page.html" class="nav-btn btn-left">⬅ Back</a>
-
-    <!-- 2. CENTER: XP & Level Stats -->
-    <div class="center-stats">
-        <div id="userStats" class="badge">Level 1 • 0 XP</div>
-        <div class="badge streak-pill">🔥 Streak</div>
-    </div>
-
-    <!-- 3. RIGHT: Language Button -->
     <button id="langBtn" class="nav-btn btn-right" onclick="toggleLanguage()">🇧🇬 BG</button>
 
     <div class="orbit-container">
@@ -93,13 +47,10 @@
 
         <div class="orbit-wrapper">
             <div class="input-panel main-panel">
-
-                <!-- LABEL CONTAINER -->
                 <div class="label-row">
                     <label id="inputLabel" style="margin:0;">PASTE YOUR NOTES</label>
                     <span id="charCount" style="font-size: 0.8rem; color: #94a3b8;">0 / 5000</span>
                 </div>
-
                 <textarea id="userInput" maxlength="5000" placeholder="Paste your lesson, notes, or study material here..." oninput="updateCount(this)"></textarea>
                 <button id="generateBtn" class="launch-btn">👉 Generate Flashcards</button>
             </div>
@@ -109,7 +60,6 @@
     </div>
 
     <script>
-        // --- CHAR COUNTER ---
         function updateCount(textarea) {
             const count = textarea.value.length;
             const counter = document.getElementById('charCount');
@@ -117,7 +67,6 @@
             counter.style.color = count >= 4900 ? "#ef4444" : "#94a3b8";
         }
 
-        // --- TRANSLATION DATA ---
         const translations = {
             en: {
                 title: "Memory Orbit",
@@ -167,12 +116,6 @@
             document.querySelector('.btn-left').innerText = t.back;
         }
 
-        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        const statsBadge = document.getElementById("userStats");
-        if (currentUser) {
-            statsBadge.innerText = `Level ${currentUser.level} • ${currentUser.xp} XP`;
-        }
-
         const btn = document.getElementById('generateBtn');
         const input = document.getElementById('userInput');
         const container = document.getElementById('cardsArea');
@@ -180,24 +123,18 @@
         btn.addEventListener('click', async () => {
             const text = input.value;
             const t = translations[currentLang];
-
             if (!text) return alert(t.alertText);
-
             btn.innerText = t.loading;
-
             try {
-                // FIXED URL (No localhost needed because Auto-Corrector puts us on the right port)
                 const response = await fetch('/api/flashcards', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ text: text, lang: currentLang })
                 });
-
                 const data = await response.json();
                 if (data.error) alert(data.error);
                 else renderCards(data.flashcards);
             } catch (err) { alert("Server Error!"); }
-
             btn.innerText = t.btn;
         });
 
@@ -205,7 +142,6 @@
             container.innerHTML = "";
             container.style.display = "block";
             const t = translations[currentLang];
-
             cards.forEach((card, index) => {
                 container.innerHTML += `
                     <div class="flashcard" style="margin-bottom: 20px; height: auto; padding: 20px;">

@@ -5,15 +5,6 @@
     <meta name="google" content="notranslate">
     <title>Knowledge Reactor - Generate Test</title>
     <link rel="stylesheet" href="sigma.css">
-
-    <!-- 🚀 AUTO-CORRECTOR: Forces the page to run on the Python Server (Port 5001) -->
-    <script>
-        if ((window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") && window.location.port !== "5001") {
-            console.log("Wrong Port! Redirecting to Python Server...");
-            window.location.href = "http://127.0.0.1:5001" + window.location.pathname;
-        }
-    </script>
-
     <style>
         .nav-btn {
             position: fixed;
@@ -34,32 +25,8 @@
             min-width: 100px;
         }
         .nav-btn:hover { background: #3b82f6; }
-
         .btn-left { left: 20px; right: auto; }
         .btn-right { right: 20px; left: auto; }
-
-        .center-stats {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-            z-index: 100;
-        }
-
-        .badge {
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-weight: bold;
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid rgba(59, 130, 246, 0.5);
-            backdrop-filter: blur(5px);
-            color: white;
-            white-space: nowrap;
-        }
-        .streak-pill { border-color: #ef4444; color: #ef4444; }
-
         .label-row {
             display: flex;
             justify-content: space-between;
@@ -72,12 +39,6 @@
 <body id="portal-body">
 
     <a href="Main-Page.html" class="nav-btn btn-left">⬅ Back</a>
-
-    <div class="center-stats">
-        <div id="userStats" class="badge">Level 1 • 0 XP</div>
-        <div class="badge streak-pill">🔥 Streak</div>
-    </div>
-
     <button id="langBtn" class="nav-btn btn-right" onclick="toggleLanguage()">🇧🇬 BG</button>
 
     <div class="main-wrapper">
@@ -86,12 +47,10 @@
 
         <div class="orbit-grid-clean">
             <div class="input-card">
-
                 <div class="label-row">
                     <label id="inputLabel" style="margin:0;">PASTE YOUR TEXT</label>
                     <span id="charCount" style="font-size: 0.8rem; color: #94a3b8;">0 / 5000</span>
                 </div>
-
                 <div class="text-area-container">
                     <textarea id="quizInput" maxlength="5000" placeholder="Paste your lesson, notes, or chapter here..." oninput="updateCount(this)"></textarea>
                 </div>
@@ -121,7 +80,6 @@
                 correct: "✅ Correct!",
                 wrong: "❌ Wrong!",
                 alertText: "Please paste text first!",
-                xpMsg: "✨ +20 XP!",
                 back: "⬅ Back"
             },
             bg: {
@@ -134,7 +92,6 @@
                 correct: "✅ Правилно!",
                 wrong: "❌ Грешка!",
                 alertText: "Моля постави текст!",
-                xpMsg: "✨ +20 Точки!",
                 back: "⬅ Назад"
             }
         };
@@ -159,14 +116,6 @@
             document.querySelector('.btn-left').innerText = t.back;
         }
 
-        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        const statsBadge = document.getElementById("userStats");
-        if (currentUser) updateStatsUI(currentUser.level, currentUser.xp);
-
-        function updateStatsUI(lvl, xp) {
-            statsBadge.innerText = `Level ${lvl} • ${xp} XP`;
-        }
-
         const btn = document.getElementById('quizBtn');
         const input = document.getElementById('quizInput');
         const container = document.getElementById('quizContainer');
@@ -174,23 +123,17 @@
         btn.addEventListener('click', async () => {
             const text = input.value;
             const t = translations[currentLang];
-
             if (!text) return alert(t.alertText);
-
             btn.innerText = t.loading;
-
             try {
-                // FIXED: Relative path works because we are on port 5001
                 const res = await fetch('/api/quiz', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ text: text, lang: currentLang })
                 });
-
                 const data = await res.json();
                 if (data.error) alert(data.error);
                 else renderQuiz(data.quiz);
-
             } catch (e) { alert("Server Error (Is Python Running?)"); }
             btn.innerText = t.btn;
         });
@@ -203,7 +146,6 @@
             questions.forEach((q, idx) => {
                 let opts = "";
                 const correctEnc = btoa(unescape(encodeURIComponent(q.correct_answer.trim())));
-
                 q.options.forEach(opt => {
                     const optEnc = btoa(unescape(encodeURIComponent(opt.trim())));
                     opts += `<div class="quiz-option" data-val="${optEnc}"
@@ -215,7 +157,6 @@
                     <div style="background:rgba(15,23,42,0.8); padding:30px; margin-bottom:30px; border:2px solid #3b82f6; border-radius:20px;">
                         <h3 style="color:white;">${idx+1}. ${q.question}</h3>
                         <div class="opt-group">${opts}</div>
-                        <p class="xp-anim" style="display:none; color:#fbbf24; font-weight:bold; font-size:1.2rem; margin-top:10px;">${t.xpMsg}</p>
                         <p class="expl" style="display:none; color:#4ade80; margin-top:5px;">${q.explanation}</p>
                     </div>`;
             });
@@ -224,7 +165,7 @@
 
         window.checkAns = function(el, corrEnc) {
             const parent = el.parentElement;
-            if(parent.classList.contains('locked')) return;
+            if (parent.classList.contains('locked')) return;
             parent.classList.add('locked');
 
             const t = translations[currentLang];
@@ -233,42 +174,21 @@
 
             const card = parent.parentElement;
             const expl = card.querySelector('.expl');
-            const xpAnim = card.querySelector('.xp-anim');
 
-            if(selText === corrText) {
+            if (selText === corrText) {
                 el.style.background = "#22c55e";
                 el.style.color = "black";
                 expl.innerText = t.correct + " " + expl.innerText;
-                expl.style.display = "block";
-                xpAnim.style.display = "block";
-                saveXP(20);
             } else {
                 el.style.background = "#ef4444";
                 expl.innerText = t.wrong + " " + expl.innerText;
-                expl.style.display = "block";
                 parent.querySelectorAll('.quiz-option').forEach(opt => {
                     const val = decodeURIComponent(escape(window.atob(opt.getAttribute('data-val')))).trim().toLowerCase().replace(/^[a-d][\)\.]\s*/, "");
-                    if(val === corrText) opt.style.border = "2px solid #22c55e";
+                    if (val === corrText) opt.style.border = "2px solid #22c55e";
                 });
             }
+            expl.style.display = "block";
         };
-
-        async function saveXP(amount) {
-            if(!currentUser) return;
-            try {
-                // FIXED: Relative path
-                const res = await fetch('/api/update-xp', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ user_id: currentUser.id, xp: amount })
-                });
-                const data = await res.json();
-                currentUser.xp = data.new_xp;
-                currentUser.level = data.new_level;
-                localStorage.setItem("currentUser", JSON.stringify(currentUser));
-                updateStatsUI(currentUser.level, currentUser.xp);
-            } catch(e) { console.error(e); }
-        }
     </script>
 </body>
 </html>
