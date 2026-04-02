@@ -171,4 +171,4 @@ Built as a personal project to make studying smarter and more engaging.
 
 ## 📄 License
 
-This project is open source under the [MIT License](LICENSE).
+This project is open source under the [MIT License](LICENSE).# updated
