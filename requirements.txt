@@ -1,4 +1,5 @@
-
-google-genai
 flask
 flask-cors
+google-genai
+python-dotenv
+requests

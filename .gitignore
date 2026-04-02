@@ -1,0 +1,22 @@
+# Environment variables (NEVER commit these)
+.env
+
+# Database (contains real user data)
+learnfast.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.venv
+
+# PyCharm
+.idea/
+
+# Mac
+.DS_Store
+
+# Logs
+*.log

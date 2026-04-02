@@ -2,91 +2,93 @@ import requests
 import json
 
 
-# --- 1. AUTO-DISCOVERY FUNCTION (Fixed Name) ---
-def get_best_model(api_key):
-    """Finds the best available model for your key."""
-    url = f"https://generativelanguage.googleapis.com/v1beta/models?key={api_key}"
-    try:
-        response = requests.get(url)
-        if response.status_code != 200:
-            # If we can't check, default to the most common one
-            return "gemini-1.5-flash"
+# --- CORE GROQ FUNCTION ---
+def ask_groq(api_key, prompt, system_instruction):
+    if not api_key:
+        return {"error": "API Key is missing. Check your .env file."}
 
-        data = response.json()
-        # Filter for models that support generating content
-        models = [m['name'].replace("models/", "") for m in data.get('models', []) if
-                  'generateContent' in m.get('supportedGenerationMethods', [])]
-
-        # Priority List: Try Flash first, then Pro
-        for m in models:
-            if "flash" in m and "8b" not in m: return m
-        for m in models:
-            if "pro" in m: return m
-
-        # If list exists but no match, return first available
-        return models[0] if models else "gemini-1.5-flash"
-    except:
-        return "gemini-1.5-flash"
-
-
-# --- 2. CORE GOOGLE FUNCTION ---
-def ask_google(api_key, prompt, system_instruction):
-    if not api_key: return {"error": "API Key is missing."}
-
-    # Now this call will work because the name matches above
-    model = get_best_model(api_key)
-    print(f"🚀 USING MODEL: {model}")
-
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
-    headers = {"Content-Type": "application/json"}
+    url = "https://api.groq.com/openai/v1/chat/completions"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
 
     data = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "system_instruction": {"parts": [{"text": system_instruction}]},
-        "generationConfig": {"response_mime_type": "application/json"}
+        "model": "llama-3.3-70b-versatile",
+        "messages": [
+            {"role": "system", "content": system_instruction},
+            {"role": "user", "content": prompt}
+        ],
+        "response_format": {"type": "json_object"},
+        "temperature": 0.7
     }
 
     try:
-        response = requests.post(url, headers=headers, json=data)
-        if response.status_code != 200: return {"error": f"Google refused: {response.status_code}"}
+        response = requests.post(url, headers=headers, json=data, timeout=30)
+
+        if response.status_code == 401:
+            return {"error": "Invalid API key. Check your .env file."}
+        if response.status_code == 429:
+            return {"error": "Rate limit hit. Try again in a moment."}
+        if response.status_code != 200:
+            return {"error": f"Groq API error: {response.status_code}"}
 
         result = response.json()
-        if "candidates" not in result: return {"error": "AI returned no content."}
 
-        text = result["candidates"][0]["content"]["parts"][0]["text"]
+        if "choices" not in result or not result["choices"]:
+            return {"error": "Groq returned no content."}
+
+        text = result["choices"][0]["message"]["content"].strip()
         text = text.replace("```json", "").replace("```", "").strip()
         return json.loads(text)
+
+    except requests.Timeout:
+        return {"error": "Request timed out. Try again."}
+    except json.JSONDecodeError:
+        return {"error": "AI returned invalid JSON. Try again."}
     except Exception as e:
-        return {"error": str(e)}
+        return {"error": f"Unexpected error: {str(e)}"}
 
 
-# --- HELPER FOR LANGUAGE ---
+# --- LANGUAGE HELPER ---
 def get_lang_instruction(lang):
     if lang == 'bg':
-        return " IMPORTANT: The content MUST be in BULGARIAN language. Keep the JSON keys in English, but the values in Bulgarian."
+        return " IMPORTANT: All content values MUST be in BULGARIAN language. Keep JSON keys in English, but all values in Bulgarian."
     return ""
 
 
-# --- 3. FEATURE FUNCTIONS ---
+# --- FEATURE FUNCTIONS ---
 
 def generate_flashcards(api_key, text, lang='en'):
     lang_note = get_lang_instruction(lang)
-    sys_msg = f"Create 5 flashcards. Return strictly valid JSON: {{ \"flashcards\": [ {{\"question\": \"...\", \"answer\": \"...\", \"funny_note\": \"...\"}} ] }}{lang_note}"
-    return ask_google(api_key, f"Make flashcards for: {text}", sys_msg)
+    system = (
+        f"You are a study assistant. Create exactly 5 flashcards from the given text. "
+        f"Return ONLY valid JSON in this exact format: "
+        f'{{ "flashcards": [ {{"question": "...", "answer": "...", "funny_note": "..."}} ] }}'
+        f"{lang_note}"
+    )
+    return ask_groq(api_key, f"Create flashcards for this text:\n\n{text}", system)
 
 
 def generate_quiz(api_key, text, lang='en'):
     lang_note = get_lang_instruction(lang)
-    sys_msg = (
-        f"Create a 5-question multiple choice test. "
-        f"Each question must have ONE correct answer. "
-        f"Return strictly valid JSON: "
-        f"{{ \"quiz\": [ {{\"question\": \"...\", \"options\": [\"Option A\", \"Option B\", \"Option C\", \"Option D\"], \"correct_answer\": \"Exact text of correct option\", \"explanation\": \"...\"}} ] }}{lang_note}"
+    system = (
+        f"You are a quiz generator. Create exactly 5 multiple choice questions from the given text. "
+        f"Each question must have exactly 4 options and one correct answer. "
+        f"Return ONLY valid JSON in this exact format: "
+        f'{{ "quiz": [ {{"question": "...", "options": ["A", "B", "C", "D"], "correct_answer": "exact text of correct option", "explanation": "..."}} ] }}'
+        f"{lang_note}"
     )
-    return ask_google(api_key, f"Create a test based on: {text}", sys_msg)
+    return ask_groq(api_key, f"Create a quiz based on this text:\n\n{text}", system)
 
 
 def simplify_text(api_key, text, lang='en'):
     lang_note = get_lang_instruction(lang)
-    sys_msg = f"Rewrite the text to be very simple (ELI5) and funny. Return strictly valid JSON: {{ \"summary_title\": \"...\", \"simplified_content\": \"...\", \"key_points\": [\"...\", \"...\"] }}{lang_note}"
-    return ask_google(api_key, f"Simplify this: {text}", sys_msg)
+    system = (
+        f"You are a study assistant. Simplify the given text so a 12-year-old can understand it. "
+        f"Make it clear, engaging, and slightly fun. "
+        f"Return ONLY valid JSON in this exact format: "
+        f'{{ "summary_title": "...", "simplified_content": "...", "key_points": ["point 1", "point 2", "point 3"] }}'
+        f"{lang_note}"
+    )
+    return ask_groq(api_key, f"Simplify this text:\n\n{text}", system)
