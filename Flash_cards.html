@@ -5,36 +5,6 @@
     <meta name="google" content="notranslate">
     <title>Memory Orbit - Flashcards</title>
     <link rel="stylesheet" href="sigma.css">
-    <style>
-        .nav-btn {
-            position: fixed;
-            top: 20px;
-            background: rgba(15, 23, 42, 0.8);
-            border: 2px solid #3b82f6;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            z-index: 200;
-            font-size: 1.1rem;
-            transition: 0.3s;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 100px;
-        }
-        .nav-btn:hover { background: #3b82f6; }
-        .btn-left { left: 20px; right: auto; }
-        .btn-right { right: 20px; left: auto; }
-        .label-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-    </style>
 </head>
 <body id="portal-body">
 
@@ -42,17 +12,17 @@
     <button id="langBtn" class="nav-btn btn-right" onclick="toggleLanguage()">🇧🇬 BG</button>
 
     <div class="orbit-container">
-        <h1 id="pageTitle">Memory Orbit</h1>
-        <p class="subtitle" id="pageSubtitle">Turn your notes into smart flashcards.</p>
+        <h1 id="pageTitle">Flashcards</h1>
+        <p class="subtitle" id="pageSubtitle">Paste your notes and get flashcards instantly.</p>
 
         <div class="orbit-wrapper">
             <div class="input-panel main-panel">
                 <div class="label-row">
-                    <label id="inputLabel" style="margin:0;">PASTE YOUR NOTES</label>
+                    <label id="inputLabel" style="margin:0;">Your notes</label>
                     <span id="charCount" style="font-size: 0.8rem; color: #94a3b8;">0 / 5000</span>
                 </div>
                 <textarea id="userInput" maxlength="5000" placeholder="Paste your lesson, notes, or study material here..." oninput="updateCount(this)"></textarea>
-                <button id="generateBtn" class="launch-btn">👉 Generate Flashcards</button>
+                <button id="generateBtn" class="launch-btn">Generate Flashcards</button>
             </div>
         </div>
 
@@ -69,28 +39,28 @@
 
         const translations = {
             en: {
-                title: "Memory Orbit",
-                subtitle: "Turn your notes into smart flashcards.",
-                label: "PASTE YOUR NOTES",
+                title: "Flashcards",
+                subtitle: "Paste your notes and get flashcards instantly.",
+                label: "Your notes",
                 placeholder: "Paste your lesson, notes, or study material here...",
-                btn: "👉 Generate Flashcards",
+                btn: "Generate Flashcards",
                 cardTitle: "Card",
                 showAns: "Show Answer",
                 hideAns: "Hide Answer",
-                loading: "🚀 Generating...",
-                alertText: "Please paste text first!",
+                loading: "Generating...",
+                alertText: "Please paste some text first!",
                 back: "⬅ Back"
             },
             bg: {
-                title: "Орбита на Паметта",
-                subtitle: "Превърни записките си в умни карти.",
-                label: "ПОСТАВИ ЗАПИСКИ ТУК",
+                title: "Флаш Карти",
+                subtitle: "Постави записките си и получи карти веднага.",
+                label: "Твоите записки",
                 placeholder: "Постави урока или записките си тук...",
-                btn: "👉 Генерирай Карти",
+                btn: "Генерирай Карти",
                 cardTitle: "Карта",
                 showAns: "Покажи Отговор",
                 hideAns: "Скрий Отговор",
-                loading: "🚀 Генериране...",
+                loading: "Генериране...",
                 alertText: "Моля постави текст!",
                 back: "⬅ Назад"
             }

@@ -5,36 +5,6 @@
     <meta name="google" content="notranslate">
     <title>Knowledge Reactor - Generate Test</title>
     <link rel="stylesheet" href="sigma.css">
-    <style>
-        .nav-btn {
-            position: fixed;
-            top: 20px;
-            background: rgba(15, 23, 42, 0.8);
-            border: 2px solid #3b82f6;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            z-index: 200;
-            font-size: 1.1rem;
-            transition: 0.3s;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 100px;
-        }
-        .nav-btn:hover { background: #3b82f6; }
-        .btn-left { left: 20px; right: auto; }
-        .btn-right { right: 20px; left: auto; }
-        .label-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-    </style>
 </head>
 <body id="portal-body">
 
@@ -42,19 +12,19 @@
     <button id="langBtn" class="nav-btn btn-right" onclick="toggleLanguage()">🇧🇬 BG</button>
 
     <div class="main-wrapper">
-        <h1 class="glow-title" id="pageTitle">Knowledge Reactor</h1>
-        <p class="subtitle-text" id="pageSubtitle">Turn your notes into a smart test.</p>
+        <h1 class="glow-title" id="pageTitle">Quiz Generator</h1>
+        <p class="subtitle-text" id="pageSubtitle">Paste your notes and test yourself.</p>
 
         <div class="orbit-grid-clean">
             <div class="input-card">
                 <div class="label-row">
-                    <label id="inputLabel" style="margin:0;">PASTE YOUR TEXT</label>
+                    <label id="inputLabel" style="margin:0;">Your notes</label>
                     <span id="charCount" style="font-size: 0.8rem; color: #94a3b8;">0 / 5000</span>
                 </div>
                 <div class="text-area-container">
                     <textarea id="quizInput" maxlength="5000" placeholder="Paste your lesson, notes, or chapter here..." oninput="updateCount(this)"></textarea>
                 </div>
-                <button id="quizBtn" class="generate-btn">👉 GENERATE TEST</button>
+                <button id="quizBtn" class="generate-btn">Generate Quiz</button>
             </div>
         </div>
 
@@ -71,24 +41,24 @@
 
         const translations = {
             en: {
-                title: "Knowledge Reactor",
-                subtitle: "Turn your notes into a smart test.",
-                label: "PASTE YOUR TEXT",
+                title: "Quiz Generator",
+                subtitle: "Paste your notes and test yourself.",
+                label: "Your notes",
                 placeholder: "Paste your lesson, notes, or chapter here...",
-                btn: "👉 GENERATE TEST",
-                loading: "🚀 Generating Quiz...",
+                btn: "Generate Quiz",
+                loading: "Generating quiz...",
                 correct: "✅ Correct!",
                 wrong: "❌ Wrong!",
-                alertText: "Please paste text first!",
+                alertText: "Please paste some text first!",
                 back: "⬅ Back"
             },
             bg: {
-                title: "Реактор на Знанието",
-                subtitle: "Превърни записките си в умен тест.",
-                label: "ПОСТАВИ ТЕКСТ ТУК",
+                title: "Генератор на Тестове",
+                subtitle: "Постави записките си и се тествай.",
+                label: "Твоите записки",
                 placeholder: "Постави урока или записките си тук...",
-                btn: "👉 ГЕНЕРИРАЙ ТЕСТ",
-                loading: "🚀 Генериране...",
+                btn: "Генерирай Тест",
+                loading: "Генериране...",
                 correct: "✅ Правилно!",
                 wrong: "❌ Грешка!",
                 alertText: "Моля постави текст!",
