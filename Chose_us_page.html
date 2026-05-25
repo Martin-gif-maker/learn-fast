@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Learn Fast</title>
+    <link rel="stylesheet" href="sigma.css">
+    <style>
+        .lang-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            z-index: 200;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+        .lang-btn:hover { background: #3b82f6; }
+    </style>
+</head>
+<body>
+    <button id="langBtn" class="lang-btn" onclick="toggleLanguage()">🇧🇬 BG</button>
+
+    <a href="First_page.html" class="back-btn-container">
+        <button class="back-button" id="backBtn">Back to Home</button>
+    </a>
+
+    <h1 id="pageTitle">Why to choose us?</h1>
+
+    <div class="main-wrapper">
+        <div class="info-box"><p id="p1">We are a team of students building this platform because we truly care about how people learn. We are not just making another study website — we are pushing ourselves every day to create something that actually helps you, supports you, and makes your learning experience smoother and more enjoyable.</p></div>
+        <div class="info-box"><p id="p2">We are working hard to make everything about your studying easier to navigate, understand, and use. From the design, to the lessons, to the way information is presented — we are constantly refining and improving so you don’t have to struggle with confusing systems.</p></div>
+        <div class="info-box"><p id="p3">We are putting serious effort into making the tests meaningful, useful, and actually helpful for your progress. Instead of just checking answers, our system is designed to show you what you understand and what you need to improve.</p></div>
+        <div class="info-box"><p id="p4">We are also transforming studying into something that feels more like a game than a chore. By making learning interactive, engaging, and rewarding, we aim to keep you motivated and curious rather than bored or overwhelmed.</p></div>
+        <div class="info-box"><p id="p5">Most importantly, your feedback matters to us. We are actively listening to what you like and what you don’t. If something doesn’t work, feels annoying, or could be better — tell us. We are committed to making this platform useful for you.</p></div>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                back: "Back to Home",
+                title: "Why to choose us?",
+                p1: "We are a team of students building this platform because we truly care about how people learn. We are not just making another study website — we are pushing ourselves every day to create something that actually helps you.",
+                p2: "We are working hard to make everything about your studying easier to navigate and understand. From the design to the lessons, we are constantly refining so you don’t have to struggle with confusing systems.",
+                p3: "We are putting serious effort into making the tests meaningful and actually helpful for your progress. Our system is designed to show you what you understand and what you need to improve.",
+                p4: "We are also transforming studying into something that feels more like a game than a chore. By making learning interactive and rewarding, we aim to keep you motivated rather than bored.",
+                p5: "Most importantly, your feedback matters to us. We are actively listening. If something doesn’t work or could be better — tell us. We are committed to making this platform useful for you."
+            },
+            bg: {
+                back: "Назад към началото",
+                title: "Защо да изберете нас?",
+                p1: "Ние сме екип от ученици, които създават тази платформа, защото ни пука как хората учат. Не правим просто поредния сайт – опитваме се да създадем нещо, което наистина ти помага и прави ученето по-приятно.",
+                p2: "Работим усилено, за да направим всичко по-лесно за разбиране и използване. От дизайна до уроците – постоянно подобряваме нещата, за да не се бориш със сложни и объркващи системи.",
+                p3: "Влагаме сериозни усилия тестовете да са смислени и полезни. Вместо просто да проверяваме отговори, нашата система ти показва какво наистина разбираш и къде имаш нужда от подобрение.",
+                p4: "Превръщаме ученето в игра, а не в задължение. Чрез интерактивност и награди се стремим да те държим мотивиран и любопитен, вместо отегчен и натоварен.",
+                p5: "Най-важното е, че твоето мнение има значение. Ние слушаме. Ако нещо не работи или може да е по-добре – кажи ни. Ние сме тук, за да направим тази платформа полезна за теб."
+            }
+        };
+
+        let currentLang = localStorage.getItem('appLang') || 'en';
+        applyLanguage();
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'bg' : 'en';
+            localStorage.setItem('appLang', currentLang);
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            const t = translations[currentLang];
+            document.getElementById('langBtn').innerText = currentLang === 'en' ? '🇧🇬 BG' : '🇬🇧 EN';
+            document.getElementById('backBtn').innerText = t.back;
+            document.getElementById('pageTitle').innerText = t.title;
+
+            for(let i=1; i<=5; i++) {
+                document.getElementById('p'+i).innerText = t['p'+i];
+            }
+        }
+    </script>
+</body>
+</html>

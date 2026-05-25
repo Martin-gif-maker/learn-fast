@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Learn Fast</title>
+    <link rel="stylesheet" href="sigma.css">
+    <style>
+        .lang-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            z-index: 200;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+        .lang-btn:hover { background: #3b82f6; }
+    </style>
+</head>
+<body>
+    <button id="langBtn" class="lang-btn" onclick="toggleLanguage()">🇧🇬 BG</button>
+
+    <a href="First_page.html" class="back-btn-container">
+        <button class="back-button" id="backBtn">Back to Home</button>
+    </a>
+
+    <h1 id="pageTitle">Who we are?</h1>
+
+    <div class="main-wrapper">
+        <div class="info-box"><p id="p1">We are students building something for every person who studies, struggles, grinds, and still keeps going. We are creating a platform with a clear mission: to make studying more playful, more engaging, and — yes — more addictive in the right way.</p></div>
+        <div class="info-box"><p id="p2">Most learning systems today feel stiff, boring, or purely mechanical. You sit, read, memorize, and forget. That kills curiosity. We believe studying should feel more like a game you care about — something that rewards effort and tracks your growth.</p></div>
+        <div class="info-box"><p id="p3">Our goal is to turn progress into something you can see and feel. When you put in the work, you move forward. When you avoid it, you notice the difference. This isn’t about making school easier — it’s about making learning smarter.</p></div>
+        <div class="info-box"><p id="p4">This platform is built for students who want to become better versions of themselves: sharper, stronger thinkers, more disciplined, and more confident. It’s for people who don’t just want to pass tests, but want to truly understand.</p></div>
+        <div class="info-box"><p id="p5">Learning is a habit. The better the system, the stronger the habit. And the stronger the habit, the better we become. This is what we are building — a smarter, more playful, and more powerful way to study.</p></div>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                back: "Back to Home",
+                title: "Who we are?",
+                p1: "We are students building something for every person who studies, struggles, grinds, and still keeps going. We are creating a platform with a clear mission: to make studying more playful, more engaging, and — yes — more addictive in the right way.",
+                p2: "Most learning systems today feel stiff, boring, or purely mechanical. You sit, read, memorize, and forget. That kills curiosity. We believe studying should feel more like a game you care about — something that rewards effort and tracks your growth.",
+                p3: "Our goal is to turn progress into something you can see and feel. When you put in the work, you move forward. When you avoid it, you notice the difference. This isn’t about making school easier — it’s about making learning smarter.",
+                p4: "This platform is built for students who want to become better versions of themselves: sharper, stronger thinkers, more disciplined, and more confident. It’s for people who don’t just want to pass tests, but want to truly understand.",
+                p5: "Learning is a habit. The better the system, the stronger the habit. And the stronger the habit, the better we become. This is what we are building — a smarter, more playful, and more powerful way to study."
+            },
+            bg: {
+                back: "Назад към началото",
+                title: "Кои сме ние?",
+                p1: "Ние сме ученици, създаващи нещо за всеки, който учи, бори се и не се отказва. Нашата мисия е ясна: да направим ученето по-забавно, по-ангажиращо и дори пристрастяващо по правилния начин.",
+                p2: "Повечето системи за обучение днес са скучни и механични. Седиш, четеш, запаметяваш и забравяш. Това убива любопитството. Ние вярваме, че ученето трябва да е като игра – да възнаграждава усилията ти и да показва растежа ти.",
+                p3: "Нашата цел е да превърнем прогреса в нещо видимо. Когато полагаш усилия, вървиш напред. Това не е просто начин да направим училището по-лесно – това е начин да направим ученето по-умно.",
+                p4: "Тази платформа е за ученици, които искат да станат по-добра версия на себе си: по-остри умове, по-дисциплинирани и по-уверени. За хора, които не искат просто да вземат изпита, а наистина да разберат материята.",
+                p5: "Ученето е навик. Колкото по-добра е системата, толкова по-силен е навикът. А ние ставаме това, което правим всеки ден. Това градим ние – по-умен и по-мощен начин за учене."
+            }
+        };
+
+        let currentLang = localStorage.getItem('appLang') || 'en';
+        applyLanguage();
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'bg' : 'en';
+            localStorage.setItem('appLang', currentLang);
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            const t = translations[currentLang];
+            document.getElementById('langBtn').innerText = currentLang === 'en' ? '🇧🇬 BG' : '🇬🇧 EN';
+            document.getElementById('backBtn').innerText = t.back;
+            document.getElementById('pageTitle').innerText = t.title;
+
+            for(let i=1; i<=5; i++) {
+                document.getElementById('p'+i).innerText = t['p'+i];
+            }
+        }
+    </script>
+</body>
+</html>

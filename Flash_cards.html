@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+    <title>Memory Orbit - Flashcards</title>
+    <link rel="stylesheet" href="sigma.css">
+</head>
+<body id="portal-body">
+
+    <a href="Main-Page.html" class="nav-btn btn-left">⬅ Back</a>
+    <button id="langBtn" class="nav-btn btn-right" onclick="toggleLanguage()">🇧🇬 BG</button>
+
+    <div class="orbit-container">
+        <h1 id="pageTitle">Flashcards</h1>
+        <p class="subtitle" id="pageSubtitle">Paste your notes and get flashcards instantly.</p>
+
+        <div class="orbit-wrapper">
+            <div class="input-panel main-panel">
+                <div class="label-row">
+                    <label id="inputLabel" style="margin:0;">Your notes</label>
+                    <span id="charCount" style="font-size: 0.8rem; color: #94a3b8;">0 / 5000</span>
+                </div>
+                <textarea id="userInput" maxlength="5000" placeholder="Paste your lesson, notes, or study material here..." oninput="updateCount(this)"></textarea>
+                <button id="generateBtn" class="launch-btn">Generate Flashcards</button>
+            </div>
+        </div>
+
+        <div id="cardsArea" class="card-display" style="display:none; margin-top: 40px;"></div>
+    </div>
+
+    <script>
+        function updateCount(textarea) {
+            const count = textarea.value.length;
+            const counter = document.getElementById('charCount');
+            counter.innerText = `${count} / 5000`;
+            counter.style.color = count >= 4900 ? "#ef4444" : "#94a3b8";
+        }
+
+        const translations = {
+            en: {
+                title: "Flashcards",
+                subtitle: "Paste your notes and get flashcards instantly.",
+                label: "Your notes",
+                placeholder: "Paste your lesson, notes, or study material here...",
+                btn: "Generate Flashcards",
+                cardTitle: "Card",
+                showAns: "Show Answer",
+                hideAns: "Hide Answer",
+                loading: "Generating...",
+                alertText: "Please paste some text first!",
+                back: "⬅ Back"
+            },
+            bg: {
+                title: "Флаш Карти",
+                subtitle: "Постави записките си и получи карти веднага.",
+                label: "Твоите записки",
+                placeholder: "Постави урока или записките си тук...",
+                btn: "Генерирай Карти",
+                cardTitle: "Карта",
+                showAns: "Покажи Отговор",
+                hideAns: "Скрий Отговор",
+                loading: "Генериране...",
+                alertText: "Моля постави текст!",
+                back: "⬅ Назад"
+            }
+        };
+
+        let currentLang = localStorage.getItem('appLang') || 'en';
+        applyLanguage();
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'bg' : 'en';
+            localStorage.setItem('appLang', currentLang);
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            const t = translations[currentLang];
+            document.getElementById('pageTitle').innerText = t.title;
+            document.getElementById('pageSubtitle').innerText = t.subtitle;
+            document.getElementById('inputLabel').innerText = t.label;
+            document.getElementById('userInput').placeholder = t.placeholder;
+            document.getElementById('generateBtn').innerText = t.btn;
+            document.getElementById('langBtn').innerText = currentLang === 'en' ? '🇧🇬 BG' : '🇬🇧 EN';
+            document.querySelector('.btn-left').innerText = t.back;
+        }
+
+        const btn = document.getElementById('generateBtn');
+        const input = document.getElementById('userInput');
+        const container = document.getElementById('cardsArea');
+
+        btn.addEventListener('click', async () => {
+            const text = input.value;
+            const t = translations[currentLang];
+            if (!text) return alert(t.alertText);
+            btn.innerText = t.loading;
+            try {
+                const response = await fetch('/api/flashcards', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: text, lang: currentLang })
+                });
+                const data = await response.json();
+                if (data.error) alert(data.error);
+                else renderCards(data.flashcards);
+            } catch (err) { alert("Server Error!"); }
+            btn.innerText = t.btn;
+        });
+
+        function renderCards(cards) {
+            container.innerHTML = "";
+            container.style.display = "block";
+            const t = translations[currentLang];
+            cards.forEach((card, index) => {
+                container.innerHTML += `
+                    <div class="flashcard" style="margin-bottom: 20px; height: auto; padding: 20px;">
+                        <div class="card-content">
+                            <h3 style="color:#3b82f6; margin-bottom:10px;">${t.cardTitle} ${index + 1}</h3>
+                            <p style="font-size: 1.2rem; margin-bottom: 15px;">${card.question}</p>
+                            <div class="answer-box" style="display:none; border-top: 1px solid #333; padding-top: 15px;">
+                                <p style="color: #4ade80; font-weight: bold; font-size: 1.1rem;">${card.answer}</p>
+                                <p style="color: #94a3b8; font-style: italic; font-size: 0.9rem;">${card.funny_note}</p>
+                            </div>
+                        </div>
+                        <button class="launch-btn" style="margin-top:10px;" onclick="toggleAns(this)">${t.showAns}</button>
+                    </div>`;
+            });
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function toggleAns(btn) {
+            const box = btn.previousElementSibling.querySelector('.answer-box');
+            const t = translations[currentLang];
+            if (box.style.display === 'none') {
+                box.style.display = 'block';
+                btn.innerText = t.hideAns;
+            } else {
+                box.style.display = 'none';
+                btn.innerText = t.showAns;
+            }
+        }
+    </script>
+</body>
+</html>

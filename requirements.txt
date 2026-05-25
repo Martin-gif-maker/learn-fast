@@ -1,0 +1,19 @@
+# LearnFast — Python dependencies
+# Install with: pip install -r requirements.txt
+
+# Web framework
+flask>=3.0.0
+flask-cors>=4.0.0
+
+# Settings & environment
+pydantic-settings>=2.2.0
+python-dotenv>=1.0.0
+
+# AI (Groq SDK)
+groq>=0.9.0
+
+# Auth
+bcrypt>=4.1.0
+
+# Production WSGI server
+gunicorn>=22.0.0

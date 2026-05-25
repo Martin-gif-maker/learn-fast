@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+    <title>Learning Universe - Dashboard</title>
+    <link rel="stylesheet" href="sigma.css">
+    <style>
+        .lang-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            z-index: 200;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+        .lang-btn:hover { background: #3b82f6; }
+    </style>
+</head>
+<body>
+
+    <button id="langBtn" class="lang-btn" onclick="toggleLanguage()">🇧🇬 BG</button>
+
+    <div class="learning-core-wrapper">
+        <div class="core-orb">
+            <div class="core-brain-icon">🧠</div>
+        </div>
+        <h2 id="welcomeText">What do you want to do?</h2>
+        <p id="welcomeSub" style="color: #94a3b8; margin-top: 8px;">Pick a tool below and get studying</p>
+    </div>
+
+    <div class="container">
+
+        <div class="cyber-box">
+            <p id="c1Text">Flashcards</p>
+            <a href="Flash_cards.html">
+                <button id="c1Btn">Make Flashcards</button>
+            </a>
+        </div>
+
+        <div class="cyber-box">
+            <p id="c2Text">Quiz yourself</p>
+            <a href="Test_subject.html">
+                <button id="c2Btn">Take a Quiz</button>
+            </a>
+        </div>
+
+        <div class="cyber-box">
+            <p id="c3Text">Simplify anything</p>
+            <a href="text.html">
+                <button id="c3Btn">Simplify Text</button>
+            </a>
+        </div>
+
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                welcome: "What do you want to do?",
+                sub: "Pick a tool below and get studying",
+                c1Text: "Flashcards",
+                c1Btn: "Make Flashcards",
+                c2Text: "Quiz yourself",
+                c2Btn: "Take a Quiz",
+                c3Text: "Simplify anything",
+                c3Btn: "Simplify Text"
+            },
+            bg: {
+                welcome: "Какво искаш да направиш?",
+                sub: "Избери инструмент и започни да учиш",
+                c1Text: "Флаш Карти",
+                c1Btn: "Направи Карти",
+                c2Text: "Тествай се",
+                c2Btn: "Направи Тест",
+                c3Text: "Опрости всичко",
+                c3Btn: "Опрости Текст"
+            }
+        };
+
+        let currentLang = localStorage.getItem('appLang') || 'en';
+        applyLanguage();
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'bg' : 'en';
+            localStorage.setItem('appLang', currentLang);
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            const t = translations[currentLang];
+            document.getElementById('langBtn').innerText = currentLang === 'en' ? '🇧🇬 BG' : '🇬🇧 EN';
+            document.getElementById('welcomeText').innerText = t.welcome;
+            document.getElementById('welcomeSub').innerText = t.sub;
+            document.getElementById('c1Text').innerText = t.c1Text;
+            document.getElementById('c1Btn').innerText = t.c1Btn;
+            document.getElementById('c2Text').innerText = t.c2Text;
+            document.getElementById('c2Btn').innerText = t.c2Btn;
+            document.getElementById('c3Text').innerText = t.c3Text;
+            document.getElementById('c3Btn').innerText = t.c3Btn;
+        }
+    </script>
+</body>
+</html>

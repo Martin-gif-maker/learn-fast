@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+    <title>Smart Study - Text Simplifier</title>
+    <link rel="stylesheet" href="sigma.css">
+</head>
+<body id="portal-body">
+
+    <a href="Main-Page.html" class="nav-btn btn-left">⬅ Back</a>
+    <button id="langBtn" class="nav-btn btn-right" onclick="toggleLanguage()">🇧🇬 BG</button>
+
+    <div class="main-wrapper">
+        <h1 class="glow-title" id="pageTitle">Simplify Text</h1>
+        <p class="subtitle-text" id="pageSubtitle">Makes any hard text easy to understand</p>
+
+        <div class="orbit-grid-clean">
+            <div class="input-card">
+                <div class="label-row">
+                    <label id="inputLabel" style="margin:0;">Paste your text</label>
+                    <span id="charCount" style="font-size: 0.8rem; color: #94a3b8;">0 / 5000</span>
+                </div>
+                <div class="text-area-container">
+                    <textarea id="simInput" maxlength="5000" placeholder="Paste a difficult paragraph, long article, or confusing notes here..." oninput="updateCount(this)"></textarea>
+                </div>
+                <button id="simBtn" class="generate-btn">👉 SIMPLIFY TEXT</button>
+            </div>
+        </div>
+
+        <div id="simContainer" style="max-width: 800px; margin: 40px auto; display: none; background: rgba(15, 23, 42, 0.9); padding: 40px; border-radius: 20px; border: 2px solid #3b82f6;">
+            <h2 id="simTitle" style="color: #4ade80; text-transform: uppercase;"></h2>
+            <p id="simContent" style="color: white; font-size: 1.2rem; line-height: 1.8; margin-bottom: 30px;"></p>
+            <h3 id="keyPointsTitle" style="color: #3b82f6; margin-bottom: 15px;">Key Takeaways:</h3>
+            <ul id="simPoints" style="color: #cbd5e1; text-align: left; font-size: 1.1rem; line-height: 1.6;"></ul>
+        </div>
+    </div>
+
+    <script>
+        function updateCount(textarea) {
+            const count = textarea.value.length;
+            const counter = document.getElementById('charCount');
+            counter.innerText = `${count} / 5000`;
+            counter.style.color = count >= 4900 ? "#ef4444" : "#94a3b8";
+        }
+
+        const translations = {
+            en: {
+                title: "Simplify Text",
+                subtitle: "Makes any hard text easy to understand",
+                label: "Paste your text",
+                placeholder: "Paste a difficult paragraph, long article, or confusing notes here...",
+                btn: "Simplify Text",
+                loading: "Simplifying...",
+                pointsTitle: "Key Takeaways:",
+                alertText: "Please paste some text first!",
+                back: "⬅ Back"
+            },
+            bg: {
+                title: "Опрости Текст",
+                subtitle: "Прави всеки труден текст лесен за разбиране",
+                label: "Постави текста си",
+                placeholder: "Постави труден параграф или текст...",
+                btn: "Опрости Текста",
+                loading: "Опростяване...",
+                pointsTitle: "Основни Точки:",
+                alertText: "Моля постави текст!",
+                back: "⬅ Назад"
+            }
+        };
+
+        let currentLang = localStorage.getItem('appLang') || 'en';
+        applyLanguage();
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'bg' : 'en';
+            localStorage.setItem('appLang', currentLang);
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            const t = translations[currentLang];
+            document.getElementById('pageTitle').innerText = t.title;
+            document.getElementById('pageSubtitle').innerText = t.subtitle;
+            document.getElementById('inputLabel').innerText = t.label;
+            document.getElementById('simInput').placeholder = t.placeholder;
+            document.getElementById('simBtn').innerText = t.btn;
+            document.getElementById('keyPointsTitle').innerText = t.pointsTitle;
+            document.getElementById('langBtn').innerText = currentLang === 'en' ? '🇧🇬 BG' : '🇬🇧 EN';
+            document.querySelector('.btn-left').innerText = t.back;
+        }
+
+        const btn = document.getElementById('simBtn');
+        const input = document.getElementById('simInput');
+        const container = document.getElementById('simContainer');
+
+        btn.addEventListener('click', async () => {
+            const text = input.value;
+            const t = translations[currentLang];
+            if (!text) return alert(t.alertText);
+            btn.innerText = t.loading;
+            try {
+                const res = await fetch('/api/simplify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: text, lang: currentLang })
+                });
+                const data = await res.json();
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    container.style.display = "block";
+                    document.getElementById('simTitle').innerText = data.summary_title;
+                    document.getElementById('simContent').innerText = data.simplified_content;
+                    const list = document.getElementById('simPoints');
+                    list.innerHTML = "";
+                    data.key_points.forEach(point => {
+                        list.innerHTML += `<li style="margin-bottom: 10px;">✨ ${point}</li>`;
+                    });
+                    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            } catch (e) { alert("Server Error (Is Python running?)"); }
+            btn.innerText = t.btn;
+        });
+    </script>
+</body>
+</html>

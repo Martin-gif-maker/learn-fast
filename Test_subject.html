@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+    <title>Knowledge Reactor - Generate Test</title>
+    <link rel="stylesheet" href="sigma.css">
+</head>
+<body id="portal-body">
+
+    <a href="Main-Page.html" class="nav-btn btn-left">⬅ Back</a>
+    <button id="langBtn" class="nav-btn btn-right" onclick="toggleLanguage()">🇧🇬 BG</button>
+
+    <div class="main-wrapper">
+        <h1 class="glow-title" id="pageTitle">Quiz Generator</h1>
+        <p class="subtitle-text" id="pageSubtitle">Paste your notes and test yourself.</p>
+
+        <div class="orbit-grid-clean">
+            <div class="input-card">
+                <div class="label-row">
+                    <label id="inputLabel" style="margin:0;">Your notes</label>
+                    <span id="charCount" style="font-size: 0.8rem; color: #94a3b8;">0 / 5000</span>
+                </div>
+                <div class="text-area-container">
+                    <textarea id="quizInput" maxlength="5000" placeholder="Paste your lesson, notes, or chapter here..." oninput="updateCount(this)"></textarea>
+                </div>
+                <button id="quizBtn" class="generate-btn">Generate Quiz</button>
+            </div>
+        </div>
+
+        <div id="quizContainer" style="max-width: 800px; margin: 40px auto; display: none;"></div>
+    </div>
+
+    <script>
+        function updateCount(textarea) {
+            const count = textarea.value.length;
+            const counter = document.getElementById('charCount');
+            counter.innerText = `${count} / 5000`;
+            counter.style.color = count >= 4900 ? "#ef4444" : "#94a3b8";
+        }
+
+        const translations = {
+            en: {
+                title: "Quiz Generator",
+                subtitle: "Paste your notes and test yourself.",
+                label: "Your notes",
+                placeholder: "Paste your lesson, notes, or chapter here...",
+                btn: "Generate Quiz",
+                loading: "Generating quiz...",
+                correct: "✅ Correct!",
+                wrong: "❌ Wrong!",
+                alertText: "Please paste some text first!",
+                back: "⬅ Back"
+            },
+            bg: {
+                title: "Генератор на Тестове",
+                subtitle: "Постави записките си и се тествай.",
+                label: "Твоите записки",
+                placeholder: "Постави урока или записките си тук...",
+                btn: "Генерирай Тест",
+                loading: "Генериране...",
+                correct: "✅ Правилно!",
+                wrong: "❌ Грешка!",
+                alertText: "Моля постави текст!",
+                back: "⬅ Назад"
+            }
+        };
+
+        let currentLang = localStorage.getItem('appLang') || 'en';
+        applyLanguage();
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'bg' : 'en';
+            localStorage.setItem('appLang', currentLang);
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            const t = translations[currentLang];
+            document.getElementById('pageTitle').innerText = t.title;
+            document.getElementById('pageSubtitle').innerText = t.subtitle;
+            document.getElementById('inputLabel').innerText = t.label;
+            document.getElementById('quizInput').placeholder = t.placeholder;
+            document.getElementById('quizBtn').innerText = t.btn;
+            document.getElementById('langBtn').innerText = currentLang === 'en' ? '🇧🇬 BG' : '🇬🇧 EN';
+            document.querySelector('.btn-left').innerText = t.back;
+        }
+
+        const btn = document.getElementById('quizBtn');
+        const input = document.getElementById('quizInput');
+        const container = document.getElementById('quizContainer');
+
+        btn.addEventListener('click', async () => {
+            const text = input.value;
+            const t = translations[currentLang];
+            if (!text) return alert(t.alertText);
+            btn.innerText = t.loading;
+            try {
+                const res = await fetch('/api/quiz', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: text, lang: currentLang })
+                });
+                const data = await res.json();
+                if (data.error) alert(data.error);
+                else renderQuiz(data.quiz);
+            } catch (e) { alert("Server Error (Is Python Running?)"); }
+            btn.innerText = t.btn;
+        });
+
+        function renderQuiz(questions) {
+            container.innerHTML = "";
+            container.style.display = "block";
+            const t = translations[currentLang];
+
+            questions.forEach((q, idx) => {
+                let opts = "";
+                const correctEnc = btoa(unescape(encodeURIComponent(q.correct_answer.trim())));
+                q.options.forEach(opt => {
+                    const optEnc = btoa(unescape(encodeURIComponent(opt.trim())));
+                    opts += `<div class="quiz-option" data-val="${optEnc}"
+                             style="margin:10px 0; padding:15px; border:1px solid #3b82f6; border-radius:10px; cursor:pointer;"
+                             onclick="checkAns(this, '${correctEnc}')">${opt}</div>`;
+                });
+
+                container.innerHTML += `
+                    <div style="background:rgba(15,23,42,0.8); padding:30px; margin-bottom:30px; border:2px solid #3b82f6; border-radius:20px;">
+                        <h3 style="color:white;">${idx+1}. ${q.question}</h3>
+                        <div class="opt-group">${opts}</div>
+                        <p class="expl" style="display:none; color:#4ade80; margin-top:5px;">${q.explanation}</p>
+                    </div>`;
+            });
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        window.checkAns = function(el, corrEnc) {
+            const parent = el.parentElement;
+            if (parent.classList.contains('locked')) return;
+            parent.classList.add('locked');
+
+            const t = translations[currentLang];
+            const selText = decodeURIComponent(escape(window.atob(el.getAttribute('data-val')))).trim().toLowerCase().replace(/^[a-d][\)\.]\s*/, "");
+            const corrText = decodeURIComponent(escape(window.atob(corrEnc))).trim().toLowerCase().replace(/^[a-d][\)\.]\s*/, "");
+
+            const card = parent.parentElement;
+            const expl = card.querySelector('.expl');
+
+            if (selText === corrText) {
+                el.style.background = "#22c55e";
+                el.style.color = "black";
+                expl.innerText = t.correct + " " + expl.innerText;
+            } else {
+                el.style.background = "#ef4444";
+                expl.innerText = t.wrong + " " + expl.innerText;
+                parent.querySelectorAll('.quiz-option').forEach(opt => {
+                    const val = decodeURIComponent(escape(window.atob(opt.getAttribute('data-val')))).trim().toLowerCase().replace(/^[a-d][\)\.]\s*/, "");
+                    if (val === corrText) opt.style.border = "2px solid #22c55e";
+                });
+            }
+            expl.style.display = "block";
+        };
+    </script>
+</body>
+</html>
